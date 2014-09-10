@@ -8,10 +8,15 @@ import java.util.Date;
  */
 public abstract class Transaction {
 
+	public enum Status {
+		CANCELED, FINISHED, PENDING
+	};
+
 	private CurrentAccount account;
 	private double amount;
 	private Date date;
 	private OperationLocation location;
+	private Status status;
 
 	protected Transaction(OperationLocation location, CurrentAccount account,
 			double amount) {
@@ -19,6 +24,16 @@ public abstract class Transaction {
 		this.date = new Date(System.currentTimeMillis());
 		this.account = account;
 		this.amount = amount;
+		this.status = Status.FINISHED;
+	}
+
+	protected Transaction(OperationLocation location, CurrentAccount account,
+			double amount, Status status) {
+		this.location = location;
+		this.date = new Date(System.currentTimeMillis());
+		this.account = account;
+		this.amount = amount;
+		this.status = status;
 	}
 
 	/**
@@ -57,6 +72,14 @@ public abstract class Transaction {
 	 */
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 }
