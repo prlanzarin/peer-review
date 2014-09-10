@@ -13,6 +13,12 @@ public class Transfer extends Transaction {
 		super(location, account, amount);
 		this.destinationAccount = destinationAccount;
 	}
+	
+	public Transfer(OperationLocation location, CurrentAccount account,
+			CurrentAccount destinationAccount, double amount, Status status) {
+		super(location, account, amount, status);
+		this.destinationAccount = destinationAccount;
+	}
 
 	/**
 	 * @return the destinationAccount
