@@ -3,8 +3,6 @@ package bank.business.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import bank.business.domain.Transaction.Status;
-
 /**
  * @author Ingrid Nunes
  * 
