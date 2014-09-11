@@ -3,10 +3,12 @@
  */
 package bank.data;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,6 +23,8 @@ import bank.business.domain.CurrentAccountId;
 import bank.business.domain.Employee;
 import bank.business.domain.OperationLocation;
 import bank.business.domain.Transaction;
+import bank.business.domain.Transfer;
+import bank.business.domain.Transaction.Status;
 
 /**
  * @author Ingrid Nunes
@@ -32,6 +36,7 @@ public class Database {
 	private final Map<String, Employee> employees;
 	private final Log log;
 	private final Map<Long, OperationLocation> operationLocations;
+	private final List<Transfer> pendingTransfers;
 
 	public Database() {
 		this(true);
@@ -42,11 +47,25 @@ public class Database {
 		this.operationLocations = new HashMap<>();
 		this.employees = new HashMap<>();
 		this.currentAccounts = new HashMap<>();
+		this.pendingTransfers = new ArrayList<>();
 		if (initData) {
 			initData();
 		}
 	}
-
+	
+	public List<Transfer> getPendingTransfers(){
+		return pendingTransfers;
+	}
+	
+	public void addPendingTransfer(Transfer transfer) {
+		assert transfer.getStatus() == Status.PENDING;
+		pendingTransfers.add(transfer);
+	}
+	
+	public void removePendingTransfer(Transfer transfer){
+		pendingTransfers.add(transfer);
+	}
+	
 	public Collection<CurrentAccount> getAllCurrentAccounts() {
 		return this.currentAccounts.values();
 	}

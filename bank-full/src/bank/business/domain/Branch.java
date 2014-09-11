@@ -11,13 +11,11 @@ import bank.business.domain.Transaction.Status;
  */
 public class Branch extends OperationLocation {
 
-	private List<Transfer> pendingTransfers;
 	private List<CurrentAccount> accounts;
 	private String name;
 
 	public Branch(long number) {
 		super(number);
-		this.pendingTransfers = new ArrayList<>();
 		this.accounts = new ArrayList<>();
 	}
 
@@ -37,23 +35,6 @@ public class Branch extends OperationLocation {
 		return accounts;
 	}
 	
-	public List<Transfer> getPendingTransfers(){
-		return pendingTransfers;
-	}
-	
-	public void addPendingTransfer(Transfer transfer) {
-		assert transfer.getStatus() == Status.PENDING;
-		pendingTransfers.add(transfer);
-	}
-	
-	public void approvePendingTransfer(Transfer transfer){
-		
-	}
-	
-	public void cancelPendingTransfer(Transfer transfer){
-		
-	}
-
 	/**
 	 * @return the name
 	 */
