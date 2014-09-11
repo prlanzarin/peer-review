@@ -164,4 +164,21 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 		return withdrawal;
 	}
 
+	@Override
+	public List<Transfer> getPendingTransfers() {
+		return database.getPendingTransfers();
+	}
+
+	@Override
+	public void approvePendingTransfer(Transfer transfer) throws BusinessException {
+		transfer.getAccount().approveTransfer(transfer);
+		database.removePendingTransfer(transfer);
+	}
+
+	@Override
+	public void cancelPendingTransfer(Transfer transfer) throws BusinessException {
+		transfer.getAccount().cancelTransfer(transfer);
+		database.removePendingTransfer(transfer);		
+	}
+
 }
