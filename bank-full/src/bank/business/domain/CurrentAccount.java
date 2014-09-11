@@ -12,6 +12,8 @@ import bank.business.domain.Transaction.Status;
  */
 public class CurrentAccount implements Credentials {
 
+	public static final double ATM_TRANSFER_LIMIT = 5000;
+
 	private double balance;
 	private Client client;
 	private List<Deposit> deposits;
@@ -89,16 +91,18 @@ public class CurrentAccount implements Credentials {
 		transactions.addAll(transfers);
 		return transactions;
 	}
-	
-	public void approveTransfer(Transfer transfer) throws BusinessException{
-		if(!transfers.contains(transfer) || transfer.getStatus() != Status.PENDING)
+
+	public void approveTransfer(Transfer transfer) throws BusinessException {
+		if (!transfers.contains(transfer)
+				|| transfer.getStatus() != Status.PENDING)
 			throw new BusinessException("business.unexpected");
 		transfer.setStatus(Status.FINISHED);
 		transfer.getAccount().depositAmount(transfer.getAmount());
 	}
-	
-	public void cancelTransfer(Transfer transfer) throws BusinessException{
-		if(!transfers.contains(transfer) || transfer.getStatus() != Status.PENDING)
+
+	public void cancelTransfer(Transfer transfer) throws BusinessException {
+		if (!transfers.contains(transfer)
+				|| transfer.getStatus() != Status.PENDING)
 			throw new BusinessException("business.unexpected");
 		transfer.setStatus(Status.CANCELED);
 		depositAmount(transfer.getAmount());
@@ -130,10 +134,14 @@ public class CurrentAccount implements Credentials {
 			CurrentAccount destinationAccount, double amount)
 			throws BusinessException {
 		withdrawalAmount(amount);
-		destinationAccount.depositAmount(amount);
-
-		Transfer transfer = new Transfer(location, this, destinationAccount,
-				amount);
+		Transfer transfer;
+		if (amount >= ATM_TRANSFER_LIMIT && location instanceof ATM) {
+			transfer = new Transfer(location, this, destinationAccount, amount,
+					Status.PENDING);
+		} else {
+			transfer = new Transfer(location, this, destinationAccount, amount);
+			destinationAccount.depositAmount(amount);
+		}
 		this.transfers.add(transfer);
 		destinationAccount.transfers.add(transfer);
 
