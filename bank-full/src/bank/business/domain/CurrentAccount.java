@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bank.business.BusinessException;
+import bank.business.domain.Transaction.Status;
 
 /**
  * @author Ingrid Nunes
@@ -87,6 +88,20 @@ public class CurrentAccount implements Credentials {
 		transactions.addAll(withdrawals);
 		transactions.addAll(transfers);
 		return transactions;
+	}
+	
+	public void approveTransfer(Transfer transfer) throws BusinessException{
+		if(!transfers.contains(transfer) || transfer.getStatus() != Status.PENDING)
+			throw new BusinessException("business.unexpected");
+		transfer.setStatus(Status.FINISHED);
+		transfer.getAccount().depositAmount(transfer.getAmount());
+	}
+	
+	public void cancelTransfer(Transfer transfer) throws BusinessException{
+		if(!transfers.contains(transfer) || transfer.getStatus() != Status.PENDING)
+			throw new BusinessException("business.unexpected");
+		transfer.setStatus(Status.CANCELED);
+		depositAmount(transfer.getAmount());
 	}
 
 	/**
