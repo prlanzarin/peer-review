@@ -20,6 +20,7 @@ import bank.business.domain.OperationLocation;
 import bank.business.domain.Transaction;
 import bank.business.domain.Transfer;
 import bank.business.domain.Withdrawal;
+import bank.business.domain.Transaction.Status;
 import bank.data.Database;
 
 /**
@@ -151,6 +152,8 @@ public class AccountOperationServiceImpl implements AccountOperationService {
 				dstAccountNumber);
 		Transfer transfer = source.transfer(
 				getOperationLocation(operationLocation), destination, amount);
+		if(transfer.getStatus() == Status.PENDING)
+			database.addPendingTransfer(transfer);
 		return transfer;
 	}
 
