@@ -47,7 +47,7 @@ public class StatementCommand extends Command {
 			return number;
 		}
 	}
-
+	
 	private static final int NUMBER_OF_POSSIBLE_MONTHS = 6;
 
 	private final AccountOperationService accountOperationService;
@@ -77,14 +77,26 @@ public class StatementCommand extends Command {
 			List<Transaction> transactions) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getTextManager().getText("date")).append("\t\t\t");
+		sb.append(getTextManager().getText("status")).append("\t\t");
 		sb.append(getTextManager().getText("location")).append("\t");
 		sb.append(getTextManager().getText("operation.type")).append("\t");
 		sb.append(getTextManager().getText("details")).append("\t");
 		sb.append(getTextManager().getText("amount")).append("\n");
-		sb.append("---------------------------------------------------------------------------------\n");
+		sb.append("------------------------------------------------------------------------------------------------------------------\n");
 		for (Transaction transaction : transactions) {
 			sb.append(UIUtils.INSTANCE.formatDateTime(transaction.getDate()))
 					.append("\t");
+			switch(transaction.getStatus()){
+			case FINISHED:
+				sb.append(getTextManager().getText("status.finished"));
+				break;
+			case PENDING:
+				sb.append(getTextManager().getText("status.pending"));
+				break;
+			case CANCELED:
+				sb.append(getTextManager().getText("status.canceled"));
+			}
+			sb.append("\t");
 			sb.append(transaction.getLocation()).append("\t");
 			if (transaction.getLocation() instanceof ATM)
 				sb.append("\t");
