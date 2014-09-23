@@ -70,14 +70,9 @@ public class TransferApprovalCommand extends Command {
 	private Transfer readTransfer(List<Transfer> pendingTransfers) {
 		
 			Transfer selectedTransfer = null;
-			if(pendingTransfers.size() > 0) {
+			if(pendingTransfers != null && pendingTransfers.size() > 0) {
 				Integer option = UIUtils.INSTANCE.readInteger("message.choose.transfer", 0, pendingTransfers.size()-1);
-				for (Transfer transfer : pendingTransfers) {
-					if (pendingTransfers.indexOf(transfer) == option) {
-						selectedTransfer = transfer;
-						break;
-					}
-				}
+				selectedTransfer = pendingTransfers.get(option);
 			}
 			else System.out.println("\nNão há transferências a serem selecionadas.");
 			return selectedTransfer; 
@@ -109,26 +104,23 @@ public class TransferApprovalCommand extends Command {
 
 	private void approvalSelection(Transfer selectedTransfer) throws BusinessException{
 		
-		if(selectedTransfer != null){
-			CurrentAccount crAccount =  selectedTransfer.getAccount();
 			String approval = null;
-			
-			approval = UIUtils.INSTANCE.readString("message.transfer.approval.options");
-			while(approval != null && (approval.equals("S") || approval.equals("N"))) {
-				if(approval.equals("S")){
-					crAccount.approveTransfer(selectedTransfer);
-					System.out.println(getTextManager().getText("message.authorized.transfer"));
-					break;
-				}
-				else if(approval.equals("N")) {
-					crAccount.cancelTransfer(selectedTransfer);
-					System.out.println(getTextManager().getText("message.canceled.transfer"));
-					System.out.println(approval);
-					break;
-				}
+			if(selectedTransfer != null){
 				approval = UIUtils.INSTANCE.readString("message.transfer.approval.options");
+				while(approval != null && (approval.equals("S") || approval.equals("N"))) {
+					if(approval.equals("S")){
+						accountOperationService.approvePendingTransfer(selectedTransfer);
+						System.out.println(getTextManager().getText("message.authorized.transfer"));
+						break;
+					}
+					else if(approval.equals("N")) {
+						accountOperationService.cancelPendingTransfer(selectedTransfer);
+						System.out.println(getTextManager().getText("message.canceled.transfer"));
+						System.out.println(approval);
+						break;
+					}
+					approval = UIUtils.INSTANCE.readString("message.transfer.approval.options");
+				}
 			}
-		}
-		
 	}
 }
