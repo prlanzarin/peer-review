@@ -1,12 +1,10 @@
 package bank.ui.text.command;
 
-
 import java.util.List;
 
 import bank.business.AccountOperationService;
 import bank.business.BusinessException;
 import bank.business.domain.ATM;
-import bank.business.domain.CurrentAccount;
 import bank.business.domain.CurrentAccountId;
 import bank.business.domain.Transaction.Status;
 import bank.business.domain.Transfer;
@@ -17,6 +15,10 @@ public class TransferApprovalCommand extends Command {
 
 	private final AccountOperationService accountOperationService;
 
+	private final String YES_CODE = "S";
+
+	private final String NO_CODE = "N";
+
 	public TransferApprovalCommand(BankTextInterface bankInterface,
 			AccountOperationService accountOperationService) {
 		super(bankInterface);
@@ -26,17 +28,17 @@ public class TransferApprovalCommand extends Command {
 	@Override
 	public void execute() throws Exception {
 
-		List<Transfer> pendingTransfers = accountOperationService.getPendingTransfers();
-		Transfer selectedTransfer = null;
+		List<Transfer> pendingTransfers = accountOperationService
+				.getPendingTransfers();
+		checkPendingTransfersEmpty(pendingTransfers);
 		showPendingTransfers(pendingTransfers);
-		selectedTransfer = readTransfer(pendingTransfers);
+		Transfer selectedTransfer = readTransfer(pendingTransfers);
 		showDetailedTransfer(selectedTransfer);
 		approvalSelection(selectedTransfer);
-		
 	}
-	
+
 	private void showPendingTransfers(List<Transfer> pendingTransfers) {
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n");
 		sb.append(getTextManager().getText("pending.transfers")).append("\t\t");
@@ -49,86 +51,90 @@ public class TransferApprovalCommand extends Command {
 			sb.append(pendingTransfers.indexOf(transfer) + "\t\t\t\t");
 			sb.append(UIUtils.INSTANCE.formatDateTime(transfer.getDate()))
 					.append("\t");
-			if(transfer.getStatus() == Status.PENDING)
+			if (transfer.getStatus() == Status.PENDING)
 				sb.append(getTextManager().getText("status.pending"));
-			
+
 			sb.append("\t");
 			sb.append(transfer.getLocation()).append("\t");
 			if (transfer.getLocation() instanceof ATM)
 				sb.append("\t");
 			sb.append(
 					getTextManager().getText(
-							"operation."
-									+ transfer.getClass().getSimpleName()))
+							"operation." + transfer.getClass().getSimpleName()))
 					.append("\t\t\n");
 		}
-			System.out.println(sb);
-			
-		
+		System.out.println(sb);
+
 	}
 
 	private Transfer readTransfer(List<Transfer> pendingTransfers) {
-		
-			Transfer selectedTransfer = null;
-			if(pendingTransfers.size() > 0) {
-				Integer option = UIUtils.INSTANCE.readInteger("message.choose.transfer", 0, pendingTransfers.size()-1);
-				for (Transfer transfer : pendingTransfers) {
-					if (pendingTransfers.indexOf(transfer) == option) {
-						selectedTransfer = transfer;
-						break;
-					}
-				}
-			}
-			else System.out.println("\nNão há transferências a serem selecionadas.");
-			return selectedTransfer; 
+
+		Transfer selectedTransfer = null;
+		if (pendingTransfers != null) {
+			Integer option = UIUtils.INSTANCE.readInteger(
+					"message.choose.transfer", 0, pendingTransfers.size() - 1);
+			selectedTransfer = pendingTransfers.get(option);
+		} else
+			System.out.println("\nNÃ£o hÃ¡ transferï¿½ncias a serem selecionadas.");
+		return selectedTransfer;
 	}
-	
-	private void showDetailedTransfer(Transfer selectedTransfer){
-		
-			StringBuffer sb = new StringBuffer();
-			if(selectedTransfer != null){
-			sb.append("\n" + getTextManager().getText("source.account")).append("\t");
-		 	sb.append(getTextManager().getText("destination.account")).append("\t");
-		 	sb.append(getTextManager().getText("amount")).append("\n");
-		 	sb.append("----------------------------------------\n");
+
+	private void showDetailedTransfer(Transfer selectedTransfer) {
+
+		StringBuffer sb = new StringBuffer();
+		if (selectedTransfer != null) {
+			sb.append("\n" + getTextManager().getText("source.account"))
+					.append("\t");
+			sb.append(getTextManager().getText("destination.account")).append(
+					"\t");
+			sb.append(getTextManager().getText("amount")).append("\n");
+			sb.append("----------------------------------------\n");
 			CurrentAccountId srcId = selectedTransfer.getAccount().getId();
 			sb.append("AG ").append(srcId.getBranch().getNumber())
-					.append(" C/C ").append(srcId.getNumber())
-					.append("\t");
-			CurrentAccountId dstId = selectedTransfer.getDestinationAccount().getId();
+					.append(" C/C ").append(srcId.getNumber()).append("\t");
+			CurrentAccountId dstId = selectedTransfer.getDestinationAccount()
+					.getId();
 			sb.append("AG ").append(dstId.getBranch().getNumber())
-			.append(" C/C ").append(dstId.getNumber())
-			.append("\t");
+					.append(" C/C ").append(dstId.getNumber()).append("\t");
 			sb.append("+ ");
 			sb.append(selectedTransfer.getAmount());
 			sb.append("\n");
 			System.out.println(sb);
-			}
+		}
 	}
 
+	private void approvalSelection(Transfer selectedTransfer)
+			throws BusinessException {
 
-	private void approvalSelection(Transfer selectedTransfer) throws BusinessException{
-		
-		if(selectedTransfer != null){
-			CurrentAccount crAccount =  selectedTransfer.getAccount();
-			String approval = null;
-			
-			approval = UIUtils.INSTANCE.readString("message.transfer.approval.options");
-			while(approval != null && (approval.equals("S") || approval.equals("N"))) {
-				if(approval.equals("S")){
-					crAccount.approveTransfer(selectedTransfer);
-					System.out.println(getTextManager().getText("message.authorized.transfer"));
-					break;
-				}
-				else if(approval.equals("N")) {
-					crAccount.cancelTransfer(selectedTransfer);
-					System.out.println(getTextManager().getText("message.canceled.transfer"));
+		String approval = null;
+		if (selectedTransfer != null) {
+			do {
+				approval = UIUtils.INSTANCE
+						.readString("message.transfer.approval.options");
+				switch (approval) {
+				case YES_CODE:
+					accountOperationService
+							.approvePendingTransfer(selectedTransfer);
+					System.out.println(getTextManager().getText(
+							"message.authorized.transfer"));
+					return;
+				case NO_CODE:
+					accountOperationService
+							.cancelPendingTransfer(selectedTransfer);
+					System.out.println(getTextManager().getText(
+							"message.canceled.transfer"));
 					System.out.println(approval);
-					break;
+					return;
 				}
-				approval = UIUtils.INSTANCE.readString("message.transfer.approval.options");
-			}
+				approval = UIUtils.INSTANCE
+						.readString("message.transfer.approval.options");
+			} while (!approval.equals(YES_CODE) && !approval.equals(NO_CODE));
 		}
-		
+	}
+
+	private void checkPendingTransfersEmpty(List<Transfer> pendingTransfers)
+			throws BusinessException {
+		if (pendingTransfers.isEmpty())
+			throw new BusinessException("exception.empty.pending.transfers");
 	}
 }

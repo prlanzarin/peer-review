@@ -63,7 +63,8 @@ public class Database {
 	}
 	
 	public void removePendingTransfer(Transfer transfer){
-		pendingTransfers.add(transfer);
+		assert transfer.getStatus() == Status.PENDING;
+		pendingTransfers.remove(transfer);
 	}
 	
 	public Collection<CurrentAccount> getAllCurrentAccounts() {

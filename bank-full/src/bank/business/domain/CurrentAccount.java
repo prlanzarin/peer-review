@@ -97,7 +97,7 @@ public class CurrentAccount implements Credentials {
 				|| transfer.getStatus() != Status.PENDING)
 			throw new BusinessException("business.unexpected");
 		transfer.setStatus(Status.FINISHED);
-		transfer.getAccount().depositAmount(transfer.getAmount());
+		transfer.getDestinationAccount().depositAmount(transfer.getAmount());
 	}
 
 	public void cancelTransfer(Transfer transfer) throws BusinessException {
