@@ -68,15 +68,12 @@ public class TransferApprovalCommand extends Command {
 	}
 
 	private Transfer readTransfer(List<Transfer> pendingTransfers) {
-
-		Transfer selectedTransfer = null;
-		if (pendingTransfers != null) {
-			Integer option = UIUtils.INSTANCE.readInteger(
-					"message.choose.transfer", 0, pendingTransfers.size() - 1);
-			selectedTransfer = pendingTransfers.get(option);
-		} else
-			System.out.println("\nNão há transfer�ncias a serem selecionadas.");
-		return selectedTransfer;
+			Transfer selectedTransfer = null;
+			if(pendingTransfers != null) {
+				Integer option = UIUtils.INSTANCE.readInteger("message.choose.transfer", 0, pendingTransfers.size()-1);
+				selectedTransfer = pendingTransfers.get(option);
+			}
+			return selectedTransfer;
 	}
 
 	private void showDetailedTransfer(Transfer selectedTransfer) {
@@ -105,7 +102,6 @@ public class TransferApprovalCommand extends Command {
 
 	private void approvalSelection(Transfer selectedTransfer)
 			throws BusinessException {
-
 		String approval = null;
 		if (selectedTransfer != null) {
 			do {
