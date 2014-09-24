@@ -26,7 +26,7 @@ public class TransferApprovalCommand extends Command {
 	}
 
 	@Override
-	public void execute() throws Exception {
+	public void execute() throws BusinessException {
 
 		List<Transfer> pendingTransfers = accountOperationService
 				.getPendingTransfers();
@@ -68,12 +68,13 @@ public class TransferApprovalCommand extends Command {
 	}
 
 	private Transfer readTransfer(List<Transfer> pendingTransfers) {
-			Transfer selectedTransfer = null;
-			if(pendingTransfers != null) {
-				Integer option = UIUtils.INSTANCE.readInteger("message.choose.transfer", 0, pendingTransfers.size()-1);
-				selectedTransfer = pendingTransfers.get(option);
-			}
-			return selectedTransfer;
+		Transfer selectedTransfer = null;
+		if (pendingTransfers != null) {
+			Integer option = UIUtils.INSTANCE.readInteger(
+					"message.choose.transfer", 0, pendingTransfers.size() - 1);
+			selectedTransfer = pendingTransfers.get(option);
+		}
+		return selectedTransfer;
 	}
 
 	private void showDetailedTransfer(Transfer selectedTransfer) {
@@ -107,25 +108,22 @@ public class TransferApprovalCommand extends Command {
 			do {
 				approval = UIUtils.INSTANCE
 						.readString("message.transfer.approval.options");
-				switch (approval) {
-				case YES_CODE:
-					accountOperationService
-							.approvePendingTransfer(selectedTransfer);
-					System.out.println(getTextManager().getText(
-							"message.authorized.transfer"));
-					return;
-				case NO_CODE:
-					accountOperationService
-							.cancelPendingTransfer(selectedTransfer);
-					System.out.println(getTextManager().getText(
-							"message.canceled.transfer"));
-					System.out.println(approval);
-					return;
-				}
-				approval = UIUtils.INSTANCE
-						.readString("message.transfer.approval.options");
 			} while (!approval.equals(YES_CODE) && !approval.equals(NO_CODE));
+			switch (approval) {
+			case YES_CODE:
+				accountOperationService
+						.approvePendingTransfer(selectedTransfer);
+				System.out.println(getTextManager().getText(
+						"message.authorized.transfer"));
+				break;
+			case NO_CODE:
+				accountOperationService.cancelPendingTransfer(selectedTransfer);
+				System.out.println(getTextManager().getText(
+						"message.canceled.transfer"));
+				System.out.println(approval);
+			}
 		}
+		return;
 	}
 
 	private void checkPendingTransfersEmpty(List<Transfer> pendingTransfers)
