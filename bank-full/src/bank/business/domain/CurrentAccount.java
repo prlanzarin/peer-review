@@ -97,6 +97,7 @@ public class CurrentAccount implements Credentials {
 				|| transfer.getStatus() != Status.PENDING)
 			throw new BusinessException("business.unexpected");
 		transfer.setStatus(Status.FINISHED);
+		transfer.getDestinationAccount().transfers.add(transfer);
 		transfer.getDestinationAccount().depositAmount(transfer.getAmount());
 	}
 
@@ -141,10 +142,9 @@ public class CurrentAccount implements Credentials {
 		} else {
 			transfer = new Transfer(location, this, destinationAccount, amount);
 			destinationAccount.depositAmount(amount);
+			destinationAccount.transfers.add(transfer);
 		}
 		this.transfers.add(transfer);
-		destinationAccount.transfers.add(transfer);
-
 		return transfer;
 	}
 
