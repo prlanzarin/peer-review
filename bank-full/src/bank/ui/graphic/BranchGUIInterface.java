@@ -18,7 +18,6 @@ import bank.ui.graphic.action.LogoutAction;
 import bank.ui.graphic.action.StatementAction;
 import bank.ui.graphic.action.TransferAction;
 import bank.ui.graphic.action.WithdrawalAction;
-import bank.ui.graphic.action.ApproveTransferAction;
 
 /**
  * @author Ingrid Nunes
@@ -51,8 +50,6 @@ public class BranchGUIInterface extends BankGraphicInterface {
 		addPanelAction(new WithdrawalAction(this, textManager,
 				accountOperationService));
 		addPanelAction(new TransferAction(this, textManager,
-				accountOperationService));
-		addPanelAction(new ApproveTransferAction(this, textManager,
 				accountOperationService));
 	}
 
