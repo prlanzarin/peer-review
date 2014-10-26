@@ -1,0 +1,295 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\linespread{1.5}	% double spaces lines
+\usepackage[hmargin=3cm,vmargin=3cm]{geometry}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{sectsty}
+\usepackage{enumitem}
+\usepackage[brazil]{babel}
+\usepackage{placeins} %mantem figuras na secao com \FloatBarrier
+\usepackage{fixltx2e} %\textsubscript
+\usepackage{textcomp}
+\usepackage{sectsty}
+\usepackage{subfig}
+\sectionfont{\large}
+\subsectionfont{\normalsize}
+%\usepackage{abntcite}
+
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+
+
+\large{ 
+\uppercase{ Universidade Federal do Rio Grande do Sul\\
+
+Instituto de Informática \\
+
+Curso de Ciência da Computação \\
+
+TÉCNICAS DE CONSTRUÇÃO DE PROGRAMAS (2014/2)\\
+}
+
+Profa. Dra. Ingrid Oliveira de Nunes\\
+
+
+Graduandos: \\ Marcos H. Backes, Paulo R.Lanzarin e 
+	 Rodrigo F. Tambara \\[5.5cm]
+
+
+
+% Title
+\LARGE {\bfseries \emph{Peer Review}: projeto da aplicação  \\[1.0cm] %sugestões de nome?
+}}
+
+
+\vfill
+
+Porto Alegre, 20 de Outubro de 2014
+
+\end{center}
+\end{titlepage}
+
+\section{Introdução}
+O presente relatório tem como objetivo discorrer em torno do projeto de uma aplicação de \emph{Peer Review} (revisão em pares), tratando de expor as classes e pacotes que compõem o sistema e os meios com os quais as funcionalidades devem ser implementadas. São apresentados, também, os diagramas de classes e sequência da aplicação para que o projeto possa ser melhor compreendido e futuramente implementado por desenvolvedores
+
+\section{Descrição da aplicação e suas funcionalidades}
+
+O sistema a ser desenvolvido se trata de uma aplicação que implemente a revisão por pares: um dos principais métodos para avaliação e aprovação de artigos científicos. Tal meio de revisão trabalha através da distribuição de membros de uma comissão de avaliadores em torno de artigos submetidos a uma conferência para que possam, assim, dar seu parecer sobre a produção. Com base nesses pareceres, um artigo será considerado aprovado ou não em uma conferência.
+
+O gerenciador de tais atividades (distribuição de avaliadores e aprovação de artigos) é o coordenador de comitê; é nesse âmbito que a presente aplicação é projetada: fornecer ao coordenador uma ferramenta simples e robusta para que o \emph{peer review} possa ser facilmente gerenciado.
+
+A aplicação, como projetada, não permite inserção de novos dados. Todos os dados referentes a artigos, pesquisadores e conferências deverão ser inseridos diretamente no banco de dados. Partindo desse princípio, o sistema tem como premissa disponibilizar três funcionalidades:
+
+\begin{itemize}
+\item {Alocação de artigos a Membros do Comitê de Programa}: o coordenador de comitê, como usuário da aplicação, tem o poder de alocar artigos a membros do comitê de programa em relação a uma determinada conferência. Cada artigo deve ter entre 2 e 5 revisores, número a ser informado pelo usuário, e devem respeitar a uma série de pré-requisitos. Após informados a quantidade de revisores e a conferência em questão, o sistema automaticamente aloca artigos aos revisores. Ao fim, é exibida uma lista de artigos alocados, juntamente com seus revisores, e é gerado um log das operações realizadas.
+
+\item {Atribuição de notas a artigos}: o usuário pode atribuir notas a artigos, associando a nota dada, entre -3 e 3, a um artigo e um revisor em questão. O gerenciador procede por escolher um artigo de uma lista geral e, a seguir, um dos revisores da produção escolhida. A nota é informada e assim armazenada.
+
+\item {Seleção de artigos}: o usuário tem a possibilidade de selecionar artigos. A seleção é feita automaticamente para uma dada conferência informada pelo gerenciador. Caso não hajam artigos sem revisores ou notas associados, o sistema exibe os artigos em duas listas: aceitos (média das notas é maior ou igual a 0) e rejeitados (média das notas é menor do que 0); do contrário, é emitido um alerta informando a falta de revisores ou notas atribuídas a algum dos artigos da lista.
+\end{itemize}
+
+
+\section{Projeto}
+
+O projeto da aplicação previamente detalhada consistiu na modelagem orientada à objetos da estrutura dos dados a serem contidos pela aplicação e as funcionalidades previstas, seguindo à risca a especificação fornecida. Foi realizada uma divisão primária em pacotes distintos: \emph{Business} (subdividido em \emph{Domain} e \emph{Impl}), \emph{Data} e \emph{UI}. Tais pacotes serão detalhados adiante, bem com as classes que os compõem. 
+
+O diagrama geral do projeto é demasiado grande para estar presente neste relatório, mas pode ser encontrado no arquivo da ferramenta CASE que veio junto a este.
+
+\subsection{Pacote \emph{conference.manager.business}}
+
+Principal módulo da aplicação, representa o domínio e a implementação de operações básicas necessárias para as funcionalidades previstas. Consiste dos subpacotes Domain (domínio) e Impl (implementação), que serão descritos em seguida.
+
+Possui as seguintes interfaces:
+\begin{itemize}
+\item \verb|CommitteeAllocationService|: interface responsável pela definição das operações necessárias para a execução da funcionalidade de alocação de artigos. É implementada pela classe \verb|CommitteeAllocationServiceImpl| e tem a dependência de \verb|AllocateCommitteeCommand|, servindo de ponte para a interface do usuário.
+\item \verb|GradeAssignmentService|: interface que abriga as operações responsáveis pela execução da funcionalidade de atribuição de notas. Também serve de ponte para a interface do usuário (tem a dependência de \verb|AssignGradeCommand|)  e é implementada pela classe \verb|GradeAssignmentServiceImpl|;
+\item \verb|PaperSelectionService|: análoga as outras duas, define as operações em relação a funcionalidade de seleção de artigos. Também serve com conexão a interface do usuário e é implementada pela classe \verb|PaperSelectionServiceImpl|
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.55\linewidth]{figures/business.png}
+\caption{Diagrama de classes do módulo \emph{Business}.}
+\label{fig:business}
+\end{figure}
+%A figura \ref{fig:business} representa o diagrama de classes do módulo Business.
+\FloatBarrier
+
+\subsubsection{Pacote \emph{conference.manager.business.domain}}
+O pacote \emph{Domain}, associado à \emph{Business}, consiste das classes que modelam o domínio da aplicação. Tais classes são tais quais as descritas a seguir:
+
+\begin{itemize}
+\item \verb|Conference|: classe responsável por moldar na aplicação informações referentes as conferências. Tem uma série de atributos, dentre os quais são passíveis de ênfase: as listas de artigos \verb|AllocatedPapers| e \verb|UnallocatedPapers|, que representam os artigos que já foram alocados a revisores e ainda não foram, bem como \verb|ungradedPapers| e \verb|gradedPapers|, que representam os artigos que ainda não foram avaliados e os que já foram; \verb|committeeMembers|, que representa os membros do comitê da conferência; \verb|reviewers|, os revisores disponíveis; etc. Possui uma série de métodos \verb|getters| para seus atributos, funções de teste para a avaliar se artigos foram alocados e avaliados, além de uma função específica para alocação de artigos e uma para atribuição de nota para o artigo;
+
+\item \verb|Paper|: responsável pela modelagem dos artigos na aplicação. Atributos notáveis são: \verb|conference|, que associa o artigo a uma conferência; \verb|reviewers|, que representa a lista de revisores do artigo; \verb|grades|, que é uma lista de notas (\verb|PaperGrade|) associadas ao artigo; etc. Possui uma série de métodos \verb|getters|, bem como métodos que checam alocação de artigos, se são aceitos e se foram avaliados, e que implementam a adição de notas e avaliadores.
+
+\item \verb|PaperGrade|: classe que representa a nota de um artigo, representada pelo atributo \verb|grade| (um inteiro que vai de -3 a 3) e associada a um revisor (atributo \verb|reviewer|);
+
+\item \verb|Researcher|: representa os pesquisadores. Uma série de atributos caracterizam os pesquisadores: \verb|id| (identificação numérica); \verb|name|; \verb|affiliation| (universidade a qual está associado); \verb|interests| (áreas de pesquisa). Também possuem uma lista de artigos  (\verb|papers|), os quais precisa revisar e atribuir notas. Os métodos são em sua maioria \verb|getters|;
+
+\item \verb|ResearchTopic|: representa áreas de interesse em pesquisa. Está associado ao campo \verb|interests| em \verb|Researcher|;
+
+\item \verb|Reviewer|: estende a classe \verb|Researcher|, adicionado uma lista \verb|papersToRe-| \verb|view| que representa os artigos a serem revisados pelo pesquisador. Implementa \verb|getters|, métodos de adição e remoção de artigos, checagem acerca da possibilidade de avaliar um artigo e um \emph{override} do método \verb|compareTo| para uso de ordenação da linguagem;
+
+\item \verb|University|: representa as universidades, às quais \verb|Researchers| estão associados;
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.9\linewidth]{figures/domain1.png}
+\caption{Diagrama geral do pacote \emph{conference.manager.business.domain}, primeira parte.}
+\label{fig:domain}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.75\linewidth]{figures/domain2.png}
+\caption{Diagrama geral do pacote \emph{conference.manager.business.domain}, segunda parte.}
+\label{fig:domain2}
+\end{figure}
+
+%A figura \ref{fig:domain} representa o diagrama de classes do pacote conference.manager.business.domain.
+\FloatBarrier
+
+\subsubsection{Pacote \emph{conference.manager.business.impl}}
+O pacote implementa as interfaces presentes no módulo \emph{Business}, referentes as funcionalidades da aplicação. As classes que realizam tais ações são as seguintes:
+
+\begin{itemize}
+\item \verb|CommitteeAllocationServiceImpl|: implementa a interface \verb|Commit-| \verb|teeAllocationService|. Tem como atributo principal \verb|database|, que representa a base de dados sobre a qual vai trabalhar, e implementa uma série de métodos necessários para a alocação de artigos (além dos quais presentes na interface). Dentre esses métodos, estão \verb|getters| que trabalham na recuperação, na base de dados, de lista de conferências que ainda não foram contempladas pela alocação de artigos pelo usuário. Também implementa um método \verb|selectReviewers|, que seleciona automaticamente revisores para um dado artigo seguindo condições préestabelecidas, e \verb|allocatePapers|, que implementa o algoritmo de alocação de artigos segundo fornecido na especificação do sistema;
+
+\item \verb|GradeAssignmentServiceImpl|: implementa a interface \verb|GradeAssign-| \verb|mentService|. Análoga a anterior, possui um atributo \verb|database| e implementa uma série de métodos. São dois \verb|getters| referentes a recuperação de artigos (todos) e revisores (em relação a um artigo) e um método responsável por gerir a atribuição de notas a artigos \verb|assignGrade|.
+
+\item \verb|PaperSelectionServiceImpl|: implementa a interface \verb|PaperSelection-| \verb|Service|. Possui o mesmo atributo \verb|database| e implementa métodos \verb|getters| em relação as conferências registradas na base e artigos aceitos (\verb|getAcceptedPa-| \verb|pers|) e rejeitados \verb|getRejectedPapers|. Os dois últimos métodos implementam algoritmos que determinam quais artigos são aceitos ou rejeitados e retornam uma lista de artigos que respeitam as regras definidas na especificação.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.8\linewidth]{figures/impl.png}
+\caption{Diagrama geral do pacote \emph{conference.manager.business.impl}.}
+\label{fig:impl}
+\end{figure}
+
+%A figura \ref{fig:impl} representa o diagrama de classes do pacote conference.manager.business.impl.
+\FloatBarrier
+
+\subsection{Pacote \emph{conference.manager.data}}
+
+Pacote que representa a base de dados da aplicação. Como exposto na requisição do projeto, os dados do sistema são inseridos diretamente no código. A classe responsável por gerir os dados brutos do sistema é \verb|Database|. Tal classe possui uma série de atributos de suma importância, como: \verb|allocatedConferences|, lista acerca das conferências cujos artigos já foram alocados; \verb|unallocatedConferences|, oposta a anterior; \verb|researchers|, pesquisadores registrados no sistema; \verb|papers|, todos os artigos presentes no sistema; \verb|ungradedPapers|, todos os artigos da aplicação que ainda não foram avaliados; etc.
+Implementa uma série de \verb|getters| para os atributos supracitados, bem como \verb|setters| para alguns deles.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.7\linewidth]{figures/data.png}
+\caption{Diagrama geral do pacote \emph{conference.manager.data}.}
+\label{fig:data}
+\end{figure}
+
+%A figura \ref{fig:data} representa o diagrama de classes do pacote conference.manager.data.
+\FloatBarrier
+
+\subsection{Pacote \emph{conference.manager.ui}}
+
+Referente a interface do usuário, o pacote abriga os subpacotes \verb|conference.mana-| \verb|ger.ui.text| e \verb|conference.manager.ui.text.command|. No projeto, optou-se por modelar somente uma interface de texto usando o processo de \emph{Command Pattern}. A implementação de uma interface gráfica fica como opção dos desenvolvedores. 
+
+O pacote principal tem a interface \verb|ConferenceManagerUI|, responsável pela inicialização e gerenciamento da UI, seja texto ou uma possível GUI. O subpacote \verb|confe-| \verb|rence.manager.ui.text|, por sua vez, possui a classe \verb|ConferenceManager-| \verb|TextUI|, que implementa a interface supracitada a possibilita a criação e gerenciamento da uma interface de texto, assim como a chamada . Também abriga a classe \verb|UIUtils|, da qual diversas classes do sistema dependem, que implementa uma série de métodos úteis de interação com o usuário (requisição de números, strings, etc), que devem ter tratamento de exceções e serem de funcionamento independente.
+
+O subpacote \verb|conference.manager.ui.text.command| possui as seguintes classes e interfaces:
+\begin{itemize}
+\item \verb|Command| (interface): interface principal de gerenciamento das operações e funcionalidades, que respeita ao \emph{Command Pattern}. Declara um método \verb|execute| responsável por executar a operação
+\item \verb|AllocateCommiteCommand|: classe responsável por implementar uma série de métodos que trabalham a funcionalidade de alocação quanto ao seu uso por parte do usuário. Implementa uma série de métodos práticos, como \verb|showUnallocated-| \verb|Conferences| e \verb|showAllocatedPapers| que trabalham na impressão dos dados requisitados pelo usuários. Também apresenta métodos de requisições ao usuário, como \verb|selectConference|, que solicita uma das conferências das listas ao usuário, e \verb|askNumberReviewers|, que solicita o número de revisores (entre 2 e 5). Possui também o método \verb|printLog|, responsável pela geração do log solicitado na especificação. A classe trabalha regida pelo método \verb|execute|, tal qual definido na interface \verb|Command|. Trabalha em conjunto com a interface \verb|CommitteeAllocationService|;
+
+\item \verb|AssignGradeCommand|: segue a mesma ideia da classe acima, sendo regida pelo método \verb|execute|. Apresenta funções de exibição de dados (\verb|showPapers|, \verb|showReviewers|) e requisição (\verb|selectPaper|, seleciona um dos artigos exibidos; \verb|requestGrade|, solicita uma nota de -3 a 3; \verb|selectReviewers|, seleciona um dos revisores exibidos). Trabalha em conjunto com a interface \verb|GradeAs-| \verb|signmentService| para implementar a funcionalidade em questão;
+
+\item \verb|SelectPapersCommand|: análoga as outras duas. Apresenta métodos de exibição, como \verb|showConferences|, \verb|printPapers| e \verb|showAcceptedPapers|, requisição (\verb|selectConference|) e teste (\verb|arePapersReviewed|, que analisa se os artigos da conferência em questão já foram alocados e avaliados). O método \verb|showAcceptedPapers| é de especial importância aqui, pois trata de inicializar a seleção dos artigos aprovados ou rejeitados através dos métodos \verb|getAccepted-| \verb|Papers| e \verb|getRejectPapers| implementados na classe de serviço da funcionalidade.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.6\linewidth]{figures/text.png}
+\caption{Diagrama geral do pacote \emph{conference.manager.ui.text, interface principal da aplicação}.}
+\label{fig:ui}
+\end{figure}
+
+%A figura \ref{fig:ui} representa o diagrama de classes do pacote conference.manager.ui.
+\FloatBarrier
+
+
+\subsection{Diagrama de sequência: alocação de artigos}
+As figuras \ref{fig:aloka1}, \ref{fig:aloka2} e \ref{fig:aloka3} mostram o diagrama de sequência da funcionalidade alocação de artigos.
+
+\subsection{Diagrama de sequência: seleção de artigos}
+As figuras \ref{fig:selection_sort1}, \ref{fig:selection_sort2} e \ref{fig:selection_sort3} mostram o diagrama de sequência da funcionalidade seleção de artigos.
+
+\subsection{Diagrama de sequência: atribuição de notas}
+As figuras \ref{fig:attr1}, \ref{fig:attr2} e \ref{fig:attr3} mostram o diagrama de sequência da funcionalidade atribuição de notas.
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.666\linewidth]{figures/aloka1.png}
+\caption{Diagrama de sequência da funcionalidade de alocação de artigos parte 1.}
+\label{fig:aloka1}
+\end{figure}
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.472\linewidth]{figures/aloka2.png}
+\caption{Diagrama de sequência da funcionalidade de alocação de artigos parte 2.}
+\label{fig:aloka2}
+\end{figure}
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.7251\linewidth]{figures/aloka3.png}
+\caption{Diagrama de sequência da funcionalidade de alocação de artigos parte 3.}
+\label{fig:aloka3}
+\end{figure}
+
+%As figuras \ref{fig:aloka} e \ref{fig:aloka} representam o diagrama de sequência da funcionalidade de alocação de artigos.
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.474\linewidth]{figures/attr1.png}
+\caption{Diagrama de sequência da funcionalidade de atribuição de notas parte 1.}
+\label{fig:attr1}
+\end{figure}
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.3651\linewidth]{figures/attr2.png}
+\caption{Diagrama de sequência da funcionalidade de atribuição de notas parte 2.}
+\label{fig:attr2}
+\end{figure}
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.53\linewidth]{figures/attr3.png}
+\caption{Diagrama de sequência da funcionalidade de atribuição de notas parte 3.}
+\label{fig:attr3}
+\end{figure}
+
+%A figura \ref{fig:attr} representa o diagrama de sequência da funcionalidade de atribuição de notas.
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.484\linewidth]{figures/selection_sort1.png}
+\caption{Diagrama de sequência da funcionalidade de seleção de artigos parte 1.}
+\label{fig:selection_sort1}
+\end{figure}
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.362\linewidth]{figures/selection_sort2.png}
+\caption{Diagrama de sequência da funcionalidade de seleção de artigos parte 2.}
+\label{fig:selection_sort2}
+\end{figure}
+
+\begin{figure}[!f] 
+\centering
+\includegraphics[width=.57\linewidth]{figures/selection_sort3.png}
+\caption{Diagrama de sequência da funcionalidade de seleção de artigos parte 3.}
+\label{fig:selection_sort3}
+\end{figure}
+
+%A figura \ref{fig:selection_sort} representa o diagrama de sequência da funcionalidade de seleção de artigos.
+\FloatBarrier
+
+\section{Considerações Finais}
+
+	Para a construção de software com qualidade é indispensável que um bom projeto seja realizado, seguindo padrões e respeitando a especificação. Dessa maneira, acredita-se que a implementação vai ser grandemente facilitada com a presença de um projeto detalhado, bem estruturado e que segue a lógica da programação orientada a objetos.
+
+
+
+\end{document}
