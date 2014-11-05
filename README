@@ -1,0 +1,18 @@
+ALTERAÇÕES NO PROJETO
+
+Seleção de artigos:
+  - getAccepted/RejectedPapers in ArticleSelectionAction;
+  - showList: chama no próprio controller usandos os getters ^;
+  - selectArticles: mudar (pegar toda a execução dos cálculos).
+ 
+Atribuição de notas:
+  - Construtor GradeArticlesAction: não precisa de scores;
+
+Alocação de artigos:
+  - sorting dos pesquisadores: implementar um sort (comparable não pode ser utilizado).  
+==================================
+
+TESTES:
+
+- Testes para os getters do domínio;
+- Teste de setScore: se foi atribuído e se foi alocado;
