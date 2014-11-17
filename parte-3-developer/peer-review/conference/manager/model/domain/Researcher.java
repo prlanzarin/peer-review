@@ -2,7 +2,7 @@ package conference.manager.model.domain;
 
 import java.util.List;
 
-public class Researcher {
+public class Researcher implements Comparable{
 
 	private int id;
 
@@ -34,6 +34,12 @@ public class Researcher {
 
 	public boolean hasPaperToReviewInConference(Conference conference) {
 		return false;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
