@@ -1,4 +1,11 @@
+package conference.manager.model.database;
+
 import java.util.List;
+
+import conference.manager.model.domain.Article;
+import conference.manager.model.domain.Conference;
+import conference.manager.model.domain.Researcher;
+import conference.manager.model.domain.Score;
 
 public class ModelDatabase {
 
@@ -30,7 +37,7 @@ public class ModelDatabase {
 
 	}
 
-	public ModelDatabase() {
+	public ModelDatabase(boolean init) {
 
 	}
 

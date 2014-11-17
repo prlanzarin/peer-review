@@ -16,3 +16,23 @@ TESTES:
 
 - Testes para os getters do domínio;
 - Teste de setScore: se foi atribuído e se foi alocado;
+
+==================================
+
+DIVISÃO DA IMPLEMENTAÇÃO:
+Marcos:
+	- Score
+	- ArticleSelectionAction
+	- Conference
+
+Paulo:
+	- Researcher
+	- AllocationArticleAction
+	- Article
+	- GradeArticlesAction
+	
+Rodrigo
+	- CommiteeHelperView
+	- ModelDatabase (*prioridade)
+	- CommitteeHelperController
+	(interface gráfica)
