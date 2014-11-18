@@ -2,7 +2,7 @@ package conference.manager.model.domain;
 
 import java.util.List;
 
-public class Researcher implements Comparable{
+public class Researcher implements Comparable<Researcher>{
 
 	private int id;
 
@@ -37,7 +37,7 @@ public class Researcher implements Comparable{
 	}
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(Researcher arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

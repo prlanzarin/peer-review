@@ -7,6 +7,10 @@ public class Article {
 	private int id;
 
 	private String title;
+	
+	private Researcher author;
+	
+	private Conference conference;
 
 	private String researchTopic;
 
@@ -14,7 +18,7 @@ public class Article {
 
 	private List<Score> scores;
 
-	public Article() {
+	public Article(int id, String title, Researcher author, Conference conference, String researchTopic) {
 
 	}
 

@@ -63,29 +63,6 @@ public class Conference {
 	}
 
 	/**
-	 * Selects the articles in the conference classifying them as accepted or
-	 * rejected, according to the conference rules.
-	 * 
-	 * @throws ModelException
-	 *             if not all the grades of the conference were graded.
-	 */
-	public void selectArticles() throws ModelException {
-		if (!isScored())
-			throw new ModelException(
-					"There are articles not graded in this conference");
-
-		this.acceptedArticles = new ArrayList<Article>();
-		this.rejectedArticles = new ArrayList<Article>();
-		for (Article article : articles) {
-			if (article.isAccepted()) {
-				addAcceptedArticle(article);
-			} else {
-				addRejectedArticle(article);
-			}
-		}
-	}
-
-	/**
 	 * Returns the list of accepted articles.
 	 * 
 	 * @return the list of accepted articles.
@@ -114,6 +91,29 @@ public class Conference {
 	}
 
 	/**
+	 * Selects the articles in the conference classifying them as accepted or
+	 * rejected, according to the conference rules.
+	 * 
+	 * @throws ModelException
+	 *             if not all the grades of the conference were graded.
+	 */
+	public void selectArticles() throws ModelException {
+		if (!isScored())
+			throw new ModelException(
+					"There are articles not graded in this conference");
+
+		this.acceptedArticles = new ArrayList<Article>();
+		this.rejectedArticles = new ArrayList<Article>();
+		for (Article article : articles) {
+			if (article.isAccepted()) {
+				addAcceptedArticle(article);
+			} else {
+				addRejectedArticle(article);
+			}
+		}
+	}
+
+	/**
 	 * Adds a score to the conference.
 	 * 
 	 * @param score
@@ -125,7 +125,9 @@ public class Conference {
 
 	/**
 	 * Adds an article to the list of accepted articles.
-	 * @param article the article to be added to the accepted list.
+	 * 
+	 * @param article
+	 *            the article to be added to the accepted list.
 	 */
 	private void addAcceptedArticle(Article article) {
 		acceptedArticles.add(article);
@@ -133,7 +135,9 @@ public class Conference {
 
 	/**
 	 * Adds an article to the list of rejected articles.
-	 * @param article the article to be added to the rejected list.
+	 * 
+	 * @param article
+	 *            the article to be added to the rejected list.
 	 */
 	private void addRejectedArticle(Article article) {
 		rejectedArticles.add(article);
@@ -141,7 +145,9 @@ public class Conference {
 
 	/**
 	 * Sets the conference to allocated or unallocated.
-	 * @param allocated true if allocated, false if unallocated.
+	 * 
+	 * @param allocated
+	 *            true if allocated, false if unallocated.
 	 */
 	private void setAllocatedArticles(boolean allocated) {
 		this.allocatedArticles = allocated;
@@ -149,6 +155,7 @@ public class Conference {
 
 	/**
 	 * Tests if the conference is allocated.
+	 * 
 	 * @return true if allocated, otherwise false.
 	 */
 	public boolean isAllocated() {
@@ -157,7 +164,9 @@ public class Conference {
 
 	/**
 	 * Allocates reviewers to the articles of the conference.
-	 * @param numReviewers the number of reviewers for each paper.
+	 * 
+	 * @param numReviewers
+	 *            the number of reviewers for each paper.
 	 */
 	public void allocate(int numReviewers) {
 		for (Article article : articles) {
@@ -168,8 +177,11 @@ public class Conference {
 
 	/**
 	 * Allocates reviewers to a single article in the conference.
-	 * @param article the article to be allocated.
-	 * @param numReviewers the number of reviewers to be allocated to the article.
+	 * 
+	 * @param article
+	 *            the article to be allocated.
+	 * @param numReviewers
+	 *            the number of reviewers to be allocated to the article.
 	 */
 	private void allocateArticle(Article article, int numReviewers) {
 		for (int i = 0; i < numReviewers; i++) {
@@ -181,8 +193,11 @@ public class Conference {
 
 	/**
 	 * Add a score to the conference.
-	 * @param article The article to be graded.
-	 * @param reviewers The reviewer which will grade the article.
+	 * 
+	 * @param article
+	 *            The article to be graded.
+	 * @param reviewers
+	 *            The reviewer which will grade the article.
 	 */
 	private void addScoresToArticle(Article article, List<Researcher> reviewers) {
 		for (Researcher reviewer : reviewers) {
@@ -194,17 +209,18 @@ public class Conference {
 
 	/**
 	 * Selects the reviewers that can review an article.
-	 * @param article The article to be allocated.
-	 * @param numReviewers The number of reviewers to be allocated to the article.
+	 * 
+	 * @param article
+	 *            The article to be allocated.
+	 * @param numReviewers
+	 *            The number of reviewers to be allocated to the article.
 	 * @return The list of reviewers that are able to review the article.
 	 */
-	@SuppressWarnings("unchecked")
 	private List<Researcher> selectReviewers(Article article, int numReviewers) {
 		List<Researcher> ableReviewers = new ArrayList<Researcher>();
 		for (Researcher reviewer : reviewers) {
 			if (reviewer.isAbleToReview(article, this))
-				;
-			ableReviewers.add(reviewer);
+				ableReviewers.add(reviewer);
 		}
 		Collections.sort(ableReviewers);
 		List<Researcher> selectedReviewers = ableReviewers.subList(
@@ -214,6 +230,7 @@ public class Conference {
 
 	/**
 	 * Tests if all of the articles in the conference are graded.
+	 * 
 	 * @return True if all the articles are graded, otherwise false.
 	 */
 	public boolean isScored() {
