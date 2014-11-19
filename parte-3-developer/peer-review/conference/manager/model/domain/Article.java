@@ -9,8 +9,6 @@ public class Article {
 	private String title;
 	
 	private Researcher author;
-	
-	private Conference conference;
 
 	private String researchTopic;
 
@@ -18,7 +16,7 @@ public class Article {
 
 	private List<Score> scores;
 
-	public Article(int id, String title, Researcher author, Conference conference, String researchTopic) {
+	public Article(int id, String title, Researcher author, String researchTopic) {
 
 	}
 
