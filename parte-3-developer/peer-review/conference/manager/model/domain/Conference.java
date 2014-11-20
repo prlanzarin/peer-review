@@ -95,7 +95,7 @@ public class Conference {
 	 * rejected, according to the conference rules.
 	 * 
 	 * @throws ModelException
-	 *             if not all the grades of the conference were graded.
+	 *             if not all the articles of the conference were graded.
 	 */
 	public void selectArticles() throws ModelException {
 		if (!isScored())
@@ -119,7 +119,7 @@ public class Conference {
 	 * @param score
 	 *            the score to be added to the conference.
 	 */
-	public void addScore(Score score) {
+	private void addScore(Score score) {
 		scores.add(score);
 	}
 
@@ -202,7 +202,7 @@ public class Conference {
 	private void addScoresToArticle(Article article, List<Researcher> reviewers) {
 		for (Researcher reviewer : reviewers) {
 			Score newScore = new Score(reviewer, article);
-			scores.add(newScore);
+			addScore(newScore);
 			article.addScore(newScore);
 		}
 	}
@@ -234,6 +234,8 @@ public class Conference {
 	 * @return True if all the articles are graded, otherwise false.
 	 */
 	public boolean isScored() {
+		if(!isAllocated())
+			return false;
 		for (Article article : articles) {
 			if (!article.isScored())
 				return false;

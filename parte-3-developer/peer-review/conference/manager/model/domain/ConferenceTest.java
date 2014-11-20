@@ -7,102 +7,99 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 
 public class ConferenceTest {
-	Conference confICSE;
-	Conference confFSE;
-	Conference confSBES;
+	Conference scoredConference;
+	Conference unscoredConference;
+	Conference unallocatedConference;
+	List<Article> acceptedArticles;
+	List<Article> rejectedArticles;
+	List<Article> articles;
+	List<Researcher> reviewers;
 
 	@Before
 	public void setUp() throws Exception {
-		ModelDatabase dataBase = new ModelDatabase(true);
-		List<Conference> conferences = dataBase.getAllConferences();
-		confICSE = conferences.get(0);
-		confFSE = conferences.get(1);
-		confSBES = conferences.get(2);
+		//TODO inicializar os dados corretamente
+
 	}
 
 	@Test
 	public void getNameTest() {
-		assertTrue(confICSE.getName().equals("ICSE"));
-		assertTrue(confFSE.getName().equals("FSE"));
-		assertTrue(confSBES.getName().equals("SBES"));
+		assertEquals("ICSE", scoredConference.getName());
+		assertEquals("FSE", unscoredConference.getName());
+		assertEquals("SBES", unallocatedConference.getName());
 	}
 
 	@Test
 	public void getArticlesTest() {
-		fail("Not yet implemented");
+		assertEquals(articles, scoredConference.getArticles());
 	}
 
 	@Test
 	public void getReviewersTest() {
-		fail("Not yet implemented");
+		assertEquals(reviewers, scoredConference.getReviewers());
 	}
 
 	@Test
 	public void getAcceptedArticlesSuccessTest() {
-		fail("Not yet implemented");
+		try {
+			scoredConference.selectArticles();
+			assertEquals(acceptedArticles,
+					scoredConference.getAcceptedArticles());
+		} catch (ModelException e) {
+			fail();
+		}
 	}
 
-	@Test
-	public void getAcceptedArticlesFailTest() {
-		fail("Not yet implemented");
+	@Test(expected = ModelException.class)
+	public void getAcceptedArticlesFailTest() throws ModelException {
+		scoredConference.getAcceptedArticles();
 	}
 
 	@Test
 	public void getRejectedArticlesSuccessTest() {
-		fail("Not yet implemented");
+		try {
+			scoredConference.selectArticles();
+			assertEquals(rejectedArticles,
+					scoredConference.getRejectedArticles());
+		} catch (ModelException e) {
+			fail();
+		}
+	}
+
+	@Test(expected = ModelException.class)
+	public void getRejectedArticlesFailTest() throws ModelException {
+		scoredConference.getRejectedArticles();
 	}
 
 	@Test
-	public void getRejectedArticlesFailTest() {
-		fail("Not yet implemented");
+	public void selectArticlesSuccessTest(){
+		try {
+			scoredConference.selectArticles();
+		} catch (ModelException e) {
+			fail();
+		}
 	}
 
-	@Test
-	public void selectSuccessTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void selectFailTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void addScoreTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void addAcceptedArticleTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void addRejectedArticleTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void setAllocatedArticleTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void addScoresToArticleTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void selectReviewersTest() {
-		fail("Not yet implemented");
+	@Test(expected = ModelException.class)
+	public void selectArticlesFailTest() throws ModelException {
+		unscoredConference.selectArticles();
 	}
 
 	@Test
 	public void isScoredTest() {
-		fail("Not yet implemented");
+		assertTrue(scoredConference.isScored());
+		assertFalse(unscoredConference.isScored());
+		assertFalse(unallocatedConference.isScored());
+	}
+
+	@Test
+	public void isAllocatedTest() {
+		assertTrue(scoredConference.isAllocated());
+		assertTrue(unscoredConference.isAllocated());
+		assertFalse(unallocatedConference.isAllocated());
 	}
 
 }
