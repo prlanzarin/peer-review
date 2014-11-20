@@ -2,53 +2,90 @@ package conference.manager.model.domain;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+
+import conference.manager.model.ModelException;
+import conference.manager.model.database.ModelDatabase;
 
 public class ScoreTest {
+	Score score1;
+	Score score2;
+	Score score3;
+	Score score4;
+	ModelDatabase database;
+	List<Researcher> researchers;
+	List<Article> articles;
 
 	@Before
 	public void setUp() throws Exception {
-		
+		database = new ModelDatabase(true);
+		researchers = database.getAllResearchers();
+		articles = database.getAllArticles();
+		score1 = new Score(researchers.get(7), articles.get(0));
+		score2 = new Score(researchers.get(9), articles.get(0));
+		score3 = new Score(researchers.get(6), articles.get(1));
+		score4 = new Score(researchers.get(0), articles.get(1));
 	}
 
 	@Test
 	public void getArticleTest() {
-		fail("Not yet implemented");
+		Article article1 = new Article(1, "Coupling and Cohesion ", researchers
+				.get(0), "Modularity");
+		Article article2 = new Article(2, "Design Patterns", researchers.get(5),
+				"Software Reuse");
+		assertEquals(article1, score1.getArticle());
+		assertEquals(article1, score2.getArticle());
+		assertEquals(article2, score3.getArticle());
+		assertEquals(article2, score4.getArticle());
 	}
 
 	@Test
 	public void getScoreTest() {
-		fail("Not yet implemented");
+		Researcher researcher8 = new Researcher(8, "Natasha", "UFRJ", Arrays.asList(
+				"Modularity", "Software Reuse", "Software Quality", "Software Product Lines"));
+		Researcher researcher10 = new Researcher(10, "Carlos", "USP", Arrays.asList(
+				"Software Reuse", "Modularity", "Software Testing"));
+		Researcher researcher7 = new Researcher(7, "Suzana", "UFRGS", Arrays.asList(
+				"Aspect-oriented Programming", "Modularity", "Software Reuse"));
+		Researcher researcher1 = new Researcher(1, "João", "UFRGS", Arrays.asList(
+				"Software Product Lines", "Software Reuse", "Modularity"));
+		assertEquals(researcher8, score1.getReviewer());
+		assertEquals(researcher10, score2.getReviewer());
+		assertEquals(researcher7, score3.getReviewer());
+		assertEquals(researcher1, score4.getReviewer());
 	}
 
 	@Test
-	public void getSetScoreSuccessTest() {
-		fail("Not yet implemented");
+	public void setScoreSuccessTest() {
+		try {
+			score1.setScore(2);
+		} catch (ModelException e) {
+			fail();
+		}
+	}
+
+	@Test(expected = ModelException.class)
+	public void setScoreFail1Test() throws ModelException {
+		score1.setScore(4);
+	}
+
+	@Test(expected = ModelException.class)
+	public void setScoreFail2Test() throws ModelException {
+		score1.setScore(-4);
 	}
 
 	@Test
-	public void getSetScoreFail1Test() {
-		fail("Not yet implemented");
+	public void isAllocatedTest() throws ModelException {
+		score1.setScore(0);
+		assertTrue(score1.isAllocated());
 	}
 
 	@Test
-	public void getSetScoreFail2Test() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void getIsAllocatedTest() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void getIsNotAllocatedTest() {
-		fail("Not yet implemented");
+	public void isNotAllocatedTest() {
+		assertFalse(score1.isAllocated());
 	}
 
 }

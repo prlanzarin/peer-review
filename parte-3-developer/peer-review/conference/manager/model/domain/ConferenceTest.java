@@ -2,19 +2,32 @@ package conference.manager.model.domain;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import conference.manager.model.database.ModelDatabase;
+
 public class ConferenceTest {
+	Conference confICSE;
+	Conference confFSE;
+	Conference confSBES;
 
 	@Before
 	public void setUp() throws Exception {
-		
+		ModelDatabase dataBase = new ModelDatabase(true);
+		List<Conference> conferences = dataBase.getAllConferences();
+		confICSE = conferences.get(0);
+		confFSE = conferences.get(1);
+		confSBES = conferences.get(2);
 	}
 
 	@Test
 	public void getNameTest() {
-		fail("Not yet implemented");
+		assertTrue(confICSE.getName().equals("ICSE"));
+		assertTrue(confFSE.getName().equals("FSE"));
+		assertTrue(confSBES.getName().equals("SBES"));
 	}
 
 	@Test

@@ -2,7 +2,7 @@ package conference.manager.model.domain;
 
 import java.util.List;
 
-public class Researcher implements Comparable<Researcher>{
+public class Researcher implements Comparable<Researcher> {
 
 	private int id;
 
@@ -16,7 +16,8 @@ public class Researcher implements Comparable<Researcher>{
 		return null;
 	}
 
-	public Researcher(int id, String name, String university, List<String> researchTopics) {
+	public Researcher(int id, String name, String university,
+			List<String> researchTopics) {
 
 	}
 
@@ -38,8 +39,10 @@ public class Researcher implements Comparable<Researcher>{
 
 	@Override
 	public int compareTo(Researcher arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	// TODO não esquecer de sobreescrever o método equals, o Eclipse faz isso
+	// automaticamente (alt+shift+s -> Generate hashCode() and equals()...)
 
 }

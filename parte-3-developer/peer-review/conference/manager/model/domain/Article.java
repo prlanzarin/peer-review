@@ -7,7 +7,7 @@ public class Article {
 	private int id;
 
 	private String title;
-	
+
 	private Researcher author;
 
 	private String researchTopic;
@@ -59,5 +59,8 @@ public class Article {
 	public boolean isScored() {
 		return false;
 	}
+
+	// TODO não esquecer de sobreescrever o método equals, o Eclipse faz isso
+	// automaticamente (alt+shift+s -> Generate hashCode() and equals()...)
 
 }

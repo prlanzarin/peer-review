@@ -84,5 +84,27 @@ public class Score {
 	public boolean isAllocated() {
 		return allocated;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Score other = (Score) obj;
+		if (article == null) {
+			if (other.article != null)
+				return false;
+		} else if (!article.equals(other.article))
+			return false;
+		if (reviewer == null) {
+			if (other.reviewer != null)
+				return false;
+		} else if (!reviewer.equals(other.reviewer))
+			return false;
+		return true;
+	}
 
 }
