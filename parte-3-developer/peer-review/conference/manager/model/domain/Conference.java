@@ -149,7 +149,7 @@ public class Conference {
 	 * @param allocated
 	 *            true if allocated, false if unallocated.
 	 */
-	private void setAllocatedArticles(boolean allocated) {
+	public void setAllocatedArticles(boolean allocated) {
 		this.allocatedArticles = allocated;
 	}
 

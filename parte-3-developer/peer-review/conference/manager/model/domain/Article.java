@@ -24,8 +24,8 @@ public class Article {
 		this.title = title;
 		this.author = author;
 		this.researchTopic = researchTopic;
-		this.reviewers = null;
-		this.scores = null;
+		this.reviewers = new ArrayList<Researcher>();
+		this.scores = new ArrayList<Score>();
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class Article {
 	 * 
 	 * @return true if the article's average score is >= 0, false otherwise
 	 */
-	public boolean isAccepted() {
+	public boolean isAccepted() { //TODO tem um erro nessa função
 		double sum = 0;
 		
 		for(Score score : this.scores){
@@ -132,11 +132,7 @@ public class Article {
 	 * @return true if allocated, false otherwise
 	 */
 	public boolean isAllocated() {
-		for(Researcher reviewer : reviewers){
-			if(reviewer == null)
-				return false;
-		}
-		return true;
+		return !reviewers.isEmpty();
 	}
 
 	/**
@@ -145,7 +141,7 @@ public class Article {
 	 * 
 	 * @return true if allocated, false otherwise
 	 */
-	public boolean isScored() {
+	public boolean isScored() { // TODO tem um erro nessa função
 		if(!isAllocated())
 			return false;
 		for(Score score : scores){

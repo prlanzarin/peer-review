@@ -2,6 +2,7 @@ package conference.manager.model.domain;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -21,7 +22,14 @@ public class ConferenceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//TODO inicializar os dados corretamente
+		ModelDatabase database = new ModelDatabase(true);
+		scoredConference = database.getAllConferences().get(1);
+		unscoredConference = database.getAllConferences().get(0);
+		unallocatedConference = database.getAllConferences().get(2);
+		reviewers = database.getAllResearchers().subList(0, 7);
+		articles = database.getAllArticles().subList(1,6);
+		acceptedArticles = articles.subList(0, 3);
+		rejectedArticles = articles.subList(3, 5);
 
 	}
 
