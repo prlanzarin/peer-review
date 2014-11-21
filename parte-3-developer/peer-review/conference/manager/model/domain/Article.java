@@ -1,15 +1,18 @@
 package conference.manager.model.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import conference.manager.model.ModelException;
 
 public class Article {
 
 	private int id;
 
 	private String title;
-
+	
 	private Researcher author;
-
+	
 	private String researchTopic;
 
 	private List<Researcher> reviewers;
@@ -17,50 +20,152 @@ public class Article {
 	private List<Score> scores;
 
 	public Article(int id, String title, Researcher author, String researchTopic) {
-
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.researchTopic = researchTopic;
+		this.reviewers = null;
+		this.scores = null;
 	}
 
+	/**
+	 * Returns the article's ID
+	 * 
+	 * @return the article's ID
+	 */
 	public int getId() {
-		return 0;
+		return id;
 	}
 
+	public Researcher getAuthor(){
+		return author;
+	}
+	
+	/**
+	 * Returns the article's research topic
+	 * 
+	 * @return the article's research topic
+	 */
 	public String getResearchTopic() {
-		return null;
+		return researchTopic;
 	}
 
-	public void addReviewer(Researcher reviewer) {
-
-	}
-
+	/**
+	 * Returns the article's list of reviewers
+	 * 
+	 * @return the article's list of reviewers
+	 */
 	public List<Researcher> getReviewers() {
-		return null;
+		return reviewers;
 	}
 
-	public boolean isAccepted() {
-		return false;
+	/**
+	 * Sets the article's score
+	 * 
+	 * @param reviewer
+	 * 			the reviewer who has given the score
+	 * @param scoreValue
+	 * 			integer value for the score
+	 * 
+	 * @throws ModelException
+	 */
+	public void setScore(Researcher reviewer, int scoreValue) throws ModelException {
+		Score score;
+		score = getScore(reviewer);
+		score.setScore(scoreValue);
 	}
-
-	public void addScore(Score score) {
-
-	}
-
-	public void setScore(Researcher reviewer, int scoreValue) {
-
-	}
-
+	
+	/**
+	 * Returns this article's score
+	 * 
+	 * @return this article's score
+	 */
 	public Score getScore(Researcher reviewer) {
+		for(Score score : scores){
+			if((score.getReviewer()).equals(reviewer))
+				return score;
+		}
 		return null;
 	}
 
+	/**
+	 * Adds a reviewer to the article's list of reviewers
+	 * 
+	 * @param reviewer
+	 * 			the reviewer to be added to the article's list of reviewers
+	 */
+	public void addReviewer(Researcher reviewer) {
+		reviewers.add(reviewer);
+	}
+
+	/**
+	 * Returns true if the article's average score is >= 0, false otherwise
+	 * 
+	 * @return true if the article's average score is >= 0, false otherwise
+	 */
+	public boolean isAccepted() {
+		double sum = 0;
+		
+		for(Score score : this.scores){
+			sum = sum + score.getScore();
+		}
+		if(sum >= 0)
+			return true;
+		
+		return false;
+	}
+
+	/**
+	 * Adds a score to the article's list of scores
+	 * 
+	 * @param reviewer
+	 * 			the score to be added to the article's list of scores
+	 */
+	public void addScore(Score score) {
+		scores.add(score);
+	}
+
+	/**
+	 * Returns true if all the reviewers have been allocated for this article,
+	 * false otherwise
+	 * 
+	 * @return true if allocated, false otherwise
+	 */
 	public boolean isAllocated() {
-		return false;
+		for(Researcher reviewer : reviewers){
+			if(reviewer == null)
+				return false;
+		}
+		return true;
 	}
 
+	/**
+	 * Returns true if all the scores have been allocated for this article,
+	 * false otherwise
+	 * 
+	 * @return true if allocated, false otherwise
+	 */
 	public boolean isScored() {
-		return false;
+		if(!isAllocated())
+			return false;
+		for(Score score : scores){
+			if(score == null)
+				return false;
+		}
+		return true;
 	}
 
-	// TODO não esquecer de sobreescrever o método equals, o Eclipse faz isso
-	// automaticamente (alt+shift+s -> Generate hashCode() and equals()...)
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Article other = (Article) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 }
