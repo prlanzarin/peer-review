@@ -111,6 +111,8 @@ public class Conference {
 				addRejectedArticle(article);
 			}
 		}
+		Collections.sort(acceptedArticles, new Article.ByDescendingGrade());
+		Collections.sort(rejectedArticles, new Article.ByAscendingGrade());
 	}
 
 	/**

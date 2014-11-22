@@ -6,3 +6,5 @@
 /ConferenceTest.class
 /ArticleTest.class
 /ResearcherTest.class
+/Article$ByAscendingGrade.class
+/Article$ByDescendingGrade.class

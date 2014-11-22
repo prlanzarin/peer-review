@@ -2,6 +2,7 @@ package conference.manager.view;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -211,16 +212,29 @@ public class CommitteeHelperView {
 	public void showAcceptedArticles(List<Article> articles) {
 		StringBuffer container = new StringBuffer();
 		container.append("Artigos aceitos:\n");
-		container.append(showArticles(articles));
+		container.append(showArticleFinalGrades(articles));
 		System.out.println(container);
 	}
 
 	public void showRejectedArticles(List<Article> articles) {
 		StringBuffer container = new StringBuffer();
 		container.append("Artigos rejeitados:\n");
-		container.append(showArticles(articles));
+		container.append(showArticleFinalGrades(articles));
 		System.out.println(container);
 	}
+	
+	public String showArticleFinalGrades(List<Article> articles){
+		StringBuffer container = new StringBuffer();
+		container.append("Autor\t\tMédia Final\tTítulo\n");
+		for(Article article : articles){
+			container.append(article.getAuthor().getName() + "\t\t"
+					+ article.getFinalScore() + "\t\t"
+					+ article.getTitle() + "\n");
+		}
+		return container.toString();
+	}
+	
+	//public 
 
 	public String readString(String field) {
 		String value = null;

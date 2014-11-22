@@ -1,6 +1,7 @@
 package conference.manager.model.domain;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import conference.manager.model.ModelException;
@@ -18,6 +19,31 @@ public class Article {
 	private List<Researcher> reviewers;
 
 	private List<Score> scores;
+	
+	public static class ByAscendingGrade implements Comparator<Article> {
+		@Override
+		public int compare(Article o1, Article o2) {
+			double comparison = o1.getFinalScore() - o2.getFinalScore();
+			if(comparison == 0)
+				return o1.getId() - o2.getId();
+			if(comparison < 0)
+				return -1;
+			return 1;
+		}
+	}
+	
+	public static class ByDescendingGrade implements Comparator<Article>{
+		@Override
+		public int compare(Article o1, Article o2) {
+			double comparison = o2.getFinalScore() - o1.getFinalScore();
+			if(comparison == 0)
+				return o1.getId() - o2.getId();
+			if(comparison < 0)
+				return -1;
+			return 1;
+		}
+		
+	}
 
 	public Article(int id, String title, Researcher author, String researchTopic) {
 		this.id = id;
@@ -62,6 +88,14 @@ public class Article {
 	 */
 	public String getResearchTopic() {
 		return researchTopic;
+	}
+	
+	public double getFinalScore(){
+		double finalScore = 0;
+		for(Score score : scores){
+			finalScore += score.getScore();
+		}
+		return finalScore / scores.size();
 	}
 	
 	public List<Score> getScores(){
