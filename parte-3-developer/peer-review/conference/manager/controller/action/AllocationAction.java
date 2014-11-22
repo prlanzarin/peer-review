@@ -20,8 +20,10 @@ public class AllocationAction extends ControllerAction {
 	 *         	The conference to be allocated
 	 * @param numOfReviewers
 	 * 			The number of reviewers
+	 * @throws ModelException 
 	 */
-	public void allocateArticles(Conference selectedConference, int numOfReviewers) {
+	public void allocateArticles(Conference selectedConference, int numOfReviewers) 
+			throws ModelException {
 		selectedConference.allocate(numOfReviewers);
 	}
 

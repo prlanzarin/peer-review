@@ -167,16 +167,9 @@ public class Article {
 	 * @return true if the article's average score is >= 0, false otherwise
 	 */
 	public boolean isAccepted() {
-		double sum = 0;
-		
-		for(Score score : scores){
-			sum = sum + score.getScore();
-			sum = sum / scores.size();
-		}
-		if(sum >= 0)
+		if(this.getFinalScore() >= 0)
 			return true;
-		
-		return false;
+		else return false;
 	}
 
 	/**

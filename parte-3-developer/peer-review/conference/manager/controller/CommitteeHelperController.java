@@ -31,6 +31,7 @@ public class CommitteeHelperController {
 		Conference selectedConference = view.requestConference(conferences);
 		int numOfReviewers = view.requestNumberOfReviewers();
 		action.allocateArticles(selectedConference, numOfReviewers);
+		
 	}
 
 	public void onArticlesSelectionButtonClicked() throws ModelException {

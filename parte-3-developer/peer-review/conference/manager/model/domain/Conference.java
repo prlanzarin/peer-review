@@ -169,8 +169,9 @@ public class Conference {
 	 * 
 	 * @param numReviewers
 	 *            the number of reviewers for each paper.
+	 * @throws ModelException 
 	 */
-	public void allocate(int numReviewers) {
+	public void allocate(int numReviewers) throws ModelException {
 		for (Article article : articles) {
 			allocateArticle(article, numReviewers);
 		}
@@ -184,8 +185,9 @@ public class Conference {
 	 *            the article to be allocated.
 	 * @param numReviewers
 	 *            the number of reviewers to be allocated to the article.
+	 * @throws ModelException 
 	 */
-	private void allocateArticle(Article article, int numReviewers) {
+	private void allocateArticle(Article article, int numReviewers) throws ModelException {
 		for (int i = 0; i < numReviewers; i++) {
 			List<Researcher> selectedReviewers = selectReviewers(article,
 					numReviewers);
@@ -231,12 +233,15 @@ public class Conference {
 	 *            The number of reviewers to be allocated to the article.
 	 * @return The list of reviewers that are able to review the article.
 	 */
-	private List<Researcher> selectReviewers(Article article, int numReviewers) {
+	private List<Researcher> selectReviewers(Article article, int numReviewers) throws ModelException{
 		List<Researcher> ableReviewers = new ArrayList<Researcher>();
 		for (Researcher reviewer : reviewers) {
 			if (reviewer.isAbleToReview(article))
 				ableReviewers.add(reviewer);
 		}
+		if(ableReviewers.size() < numReviewers)
+			throw new ModelException("Não há revisores o suficiente para realizar "
+					+ "a alocação de artigos corretamente.");
 		Collections.sort(ableReviewers);
 		List<Researcher> selectedReviewers = ableReviewers.subList(
 				LIST_FIRST_INDEX, numReviewers);
