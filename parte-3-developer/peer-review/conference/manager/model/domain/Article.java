@@ -41,6 +41,10 @@ public class Article {
 		return author;
 	}
 	
+	public String getTitle(){
+		return title;
+	}
+	
 	/**
 	 * Returns the article's research topic
 	 * 

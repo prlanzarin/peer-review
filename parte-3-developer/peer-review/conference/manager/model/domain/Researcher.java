@@ -19,6 +19,10 @@ public class Researcher implements Comparable<Researcher> {
 		this.university = university;
 		this.researchTopics = researchTopics;
 	}	
+	
+	public String getName(){
+		return name;
+	}
 
 	/**
 	 * Returns the list of research topics
