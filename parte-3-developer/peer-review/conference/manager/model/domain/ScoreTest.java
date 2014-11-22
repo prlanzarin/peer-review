@@ -43,7 +43,7 @@ public class ScoreTest {
 	}
 
 	@Test
-	public void getScoreTest() {
+	public void getReviewersTest() {
 		Researcher researcher8 = new Researcher(8, "Natasha", "UFRJ", Arrays.asList(
 				"Modularity", "Software Reuse", "Software Quality", "Software Product Lines"));
 		Researcher researcher10 = new Researcher(10, "Carlos", "USP", Arrays.asList(
