@@ -12,6 +12,8 @@ public class Researcher implements Comparable<Researcher> {
 	private String university;
 
 	private List<String> researchTopics;
+	
+	private List<Article> allocatedArticles;
 
 	public Researcher(int id, String name, String university, List<String> researchTopics) {
 		this.id = id;
@@ -36,6 +38,16 @@ public class Researcher implements Comparable<Researcher> {
 	 */
 	public List<String> getResearchTopics() {
 		return researchTopics;
+	}
+	
+	/**
+	 * Adds the allocated article to the researcher's list
+	 * 
+	 * @param article
+	 * 			Article to be added to the list.
+	 */
+	public void addArticle(Article article) {
+		allocatedArticles.add(article);
 	}
 	
 	/**
@@ -109,12 +121,18 @@ public class Researcher implements Comparable<Researcher> {
 		return false;
 	}
 
-	//TODO
 	@Override 
 	public int compareTo(Researcher reviewer) {
-		
-		
-		return 0;
+		if(this.allocatedArticles.size() > reviewer.
+				allocatedArticles.size())
+			return 1;
+			else if (this.allocatedArticles.size() < reviewer.
+					allocatedArticles.size())
+				return -1;
+			else
+				if(this.id > reviewer.id)
+					return 1;
+				else return -1;
 	}
 
 	@Override
