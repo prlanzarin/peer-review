@@ -128,7 +128,7 @@ public class ModelDatabase {
 			conference2.addScoreToArticle(articles.get(4), researchers.get(3), -3);
 			conference2.addScoreToArticle(articles.get(4), researchers.get(4), -3);
 			conference2.addScoreToArticle(articles.get(5), researchers.get(2), -1);
-			conference2.addScoreToArticle(articles.get(5), researchers.get(2), 0);
+			conference2.addScoreToArticle(articles.get(5), researchers.get(5), 0);
 		
 		} catch(ModelException e){
 			
