@@ -1,3 +1,5 @@
 bank-full/.settings/org.eclipse.ltk.core.refactoring.prefs
 diagramas/sistema-bancario.asta.lock
 parte-1-maintainer/bank-full/src/META-INF/MANIFEST.MF
+parte-3-developer/peer-review/commons-logging-1.0.4.jar
+parte-3-developer/peer-review/log4j-1.2.15.jar

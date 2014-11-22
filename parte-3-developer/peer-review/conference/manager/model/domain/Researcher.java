@@ -20,6 +20,11 @@ public class Researcher implements Comparable<Researcher> {
 		this.researchTopics = researchTopics;
 	}	
 	
+	/**
+	 * Returns the researcher's name
+	 * 
+	 * @return the researcher's names
+	 */
 	public String getName(){
 		return name;
 	}
@@ -43,8 +48,8 @@ public class Researcher implements Comparable<Researcher> {
 	 * 			the conference in which the article is going to be reviewed
 	 */
 	public boolean isAbleToReview(Article article, Conference conference) {
-		if(hasPaperToReviewInConference(conference) &&
-				hasSameAffiliation(article) &&
+		if(!(hasPaperToReviewInConference(conference)) &&
+				!(hasSameAffiliation(article)) &&
 				hasInterestIn(article.getResearchTopic()))
 			return true;
 		return false;
@@ -59,8 +64,12 @@ public class Researcher implements Comparable<Researcher> {
 	 */
 	public boolean hasSameAffiliation(Article article) {
 		Researcher author = article.getAuthor();
-		if(this.equals(author) || university == author.university)
-			return true;
+		if(author == null)
+			return false;
+		else 
+			if(this.equals(author) || university == author.university)
+				return true;
+		
 		return false;
 	}
 
@@ -72,11 +81,13 @@ public class Researcher implements Comparable<Researcher> {
 	 * 			article's research topic
 	 */
 	public boolean hasInterestIn(String researchTopic) {
-		if(!(Arrays.asList(researchTopics).contains(researchTopic)))
-			return false;
-		return true;
+		for(String interest : researchTopics){
+			if(interest == researchTopic)
+				return true;
+		}
+		return false;
 	}
-
+ 
 	/**
 	 * Returns true if the reviewer already has a paper to review in
 	 * the given conference
@@ -84,17 +95,25 @@ public class Researcher implements Comparable<Researcher> {
 	 * @param conference
 	 * 			the conference which is going to be evaluated upon
 	 */
-	public boolean hasPaperToReviewInConference(Conference conference) {
+	public boolean hasPaperToReviewInConference(Conference conference) { //TODO
+		List<Article> articles;
 		List<Researcher> reviewers;
-		reviewers = conference.getReviewers();
-		if(!(Arrays.asList(reviewers).contains(this)))
-			return false;
-		return true;
+		articles = conference.getArticles();
+		for(Article article : articles){
+			reviewers = article.getReviewers();
+			for(Researcher reviewer : reviewers){
+				if(reviewer.equals(this))
+					return true;
+			}
+		}
+		return false;
 	}
 
 	//TODO
 	@Override 
-	public int compareTo(Researcher arg0) {
+	public int compareTo(Researcher reviewer) {
+		
+		
 		return 0;
 	}
 

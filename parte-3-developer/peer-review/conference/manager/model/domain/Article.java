@@ -27,7 +27,25 @@ public class Article {
 		this.reviewers = new ArrayList<Researcher>();
 		this.scores = new ArrayList<Score>();
 	}
-
+	
+	/**
+	 * Returns the article's author
+	 * 
+	 * @return the article's author
+	 */
+	public Researcher getAuthor(){
+		return author;
+	}
+	
+	/**
+	 * Returns the article's title
+	 * 
+	 * @return the article's title
+	 */
+	public String getTitle(){
+		return title;
+	}
+	
 	/**
 	 * Returns the article's ID
 	 * 
@@ -35,14 +53,6 @@ public class Article {
 	 */
 	public int getId() {
 		return id;
-	}
-
-	public Researcher getAuthor(){
-		return author;
-	}
-	
-	public String getTitle(){
-		return title;
 	}
 	
 	/**
@@ -103,23 +113,6 @@ public class Article {
 	}
 
 	/**
-	 * Returns true if the article's average score is >= 0, false otherwise
-	 * 
-	 * @return true if the article's average score is >= 0, false otherwise
-	 */
-	public boolean isAccepted() { //TODO tem um erro nessa função
-		double sum = 0;
-		
-		for(Score score : this.scores){
-			sum = sum + score.getScore();
-		}
-		if(sum >= 0)
-			return true;
-		
-		return false;
-	}
-
-	/**
 	 * Adds a score to the article's list of scores
 	 * 
 	 * @param reviewer
@@ -127,6 +120,24 @@ public class Article {
 	 */
 	public void addScore(Score score) {
 		scores.add(score);
+	}
+
+	/**
+	 * Returns true if the article's average score is >= 0, false otherwise
+	 * 
+	 * @return true if the article's average score is >= 0, false otherwise
+	 */
+	public boolean isAccepted() {
+		double sum = 0;
+		
+		for(Score score : scores){
+			sum = sum + score.getScore();
+			sum = sum / scores.size();
+		}
+		if(sum >= 0)
+			return true;
+		
+		return false;
 	}
 
 	/**
@@ -143,13 +154,13 @@ public class Article {
 	 * Returns true if all the scores have been allocated for this article,
 	 * false otherwise
 	 * 
-	 * @return true if allocated, false otherwise
+	 * @return true if the scores have been allocated, false otherwise
 	 */
-	public boolean isScored() { // TODO tem um erro nessa função
-		if(!isAllocated())
+	public boolean isScored() { //TODO FIX
+		if(!(this.isAllocated()))
 			return false;
 		for(Score score : scores){
-			if(score == null)
+			if(!(score.isAllocated()) || score.equals(null))
 				return false;
 		}
 		return true;
