@@ -81,8 +81,8 @@ public class CommitteeHelperView {
 		String option;
 		do {
 			System.out.println(menu);
-			option = readString("Informe a opção escolhida");
-			Command command = commands.get(option.toUpperCase());
+			option = readString("Informe a opção escolhida").toUpperCase();
+			Command command = commands.get(option);
 			if (command != null) {
 				try {
 					command.execute();
@@ -94,7 +94,7 @@ public class CommitteeHelperView {
 				}
 			}
 
-		} while (option.toUpperCase() != EXIT_CODE);
+		} while (!option.equals(EXIT_CODE));
 	}
 
 	public String getMenu() {
@@ -210,12 +210,14 @@ public class CommitteeHelperView {
 		StringBuffer container = new StringBuffer();
 		container.append("Artigos aceitos:\n");
 		container.append(showArticles(articles));
+		System.out.println(container);
 	}
 
 	public void showRejectedArticles(List<Article> articles) {
 		StringBuffer container = new StringBuffer();
 		container.append("Artigos rejeitados:\n");
 		container.append(showArticles(articles));
+		System.out.println(container);
 	}
 
 	public String readString(String field) {
