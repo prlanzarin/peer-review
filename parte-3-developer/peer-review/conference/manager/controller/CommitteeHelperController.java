@@ -51,6 +51,8 @@ public class CommitteeHelperController {
 		List<Article> articles = action.getArticles();
 		Article selectedArticle = view.requestArticle(articles);
 		List<Researcher> reviewers = action.getReviewers(selectedArticle);
+		if(reviewers.isEmpty())
+			throw new ModelException("Não há revisores para realizar a atribuição de notas.");
 		Researcher selectedReviewer = view.requestReviewer(reviewers);
 		int score = view.requestScore();
 		action.setReviewerGrade(selectedReviewer, score, selectedArticle);

@@ -73,7 +73,7 @@ public class CommitteeHelperView {
 
 	public int requestScore() {
 		return readInteger("Informe a nota (inteiro entre " + MIN_GRADE + " e "
-				+ "MAX_GRADE)", MIN_GRADE, MAX_GRADE);
+				+ MAX_GRADE + ")", MIN_GRADE, MAX_GRADE);
 	}
 
 	public void showUI() {
@@ -94,7 +94,7 @@ public class CommitteeHelperView {
 				}
 			}
 
-		} while (option != EXIT_CODE);
+		} while (option.toUpperCase() != EXIT_CODE);
 	}
 
 	public String getMenu() {
