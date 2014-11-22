@@ -80,7 +80,7 @@ public class Researcher implements Comparable<Researcher> {
 		if(author == null)
 			return false;
 		else 
-			if(this.equals(author) || university == author.university)
+			if(this.equals(author) || university.equals(author.university))
 				return true;
 		
 		return false;
@@ -95,7 +95,7 @@ public class Researcher implements Comparable<Researcher> {
 	 */
 	public boolean hasInterestIn(String researchTopic) {
 		for(String interest : researchTopics){
-			if(interest == researchTopic)
+			if(interest.equals(researchTopic))
 				return true;
 		}
 		return false;

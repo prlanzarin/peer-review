@@ -114,7 +114,7 @@ public class ModelDatabase {
 
 	private void initScores(){
 		try{
-			Conference conference1 = conferences.get(0);
+			Conference conference1 = conferences.get(2);
 			conference1.addScoreToArticle(articles.get(0), researchers.get(7), 2);
 			conference1.addScoreToArticle(articles.get(0), researchers.get(9));
 			
@@ -136,10 +136,10 @@ public class ModelDatabase {
 	}
 	
 	private void initConferences() {
-		conferences.add(new Conference("ICSE", researchers.subList(0, 7), articles.subList(0,1)));
+		conferences.add(new Conference("ICSE", researchers.subList(0, 7), articles.subList(6,11)));
 		conferences.add(new Conference("FSE", researchers.subList(0, 7), articles.subList(1, 6)));
-		conferences.add(new Conference("SBES", researchers.subList(3, 10), articles.subList(6,11)));
-		conferences.get(0).setAllocatedArticles(true);
+		conferences.add(new Conference("SBES", researchers.subList(3, 10), articles.subList(0,1)));
 		conferences.get(1).setAllocatedArticles(true);
+		conferences.get(2).setAllocatedArticles(true);
 	}
 }

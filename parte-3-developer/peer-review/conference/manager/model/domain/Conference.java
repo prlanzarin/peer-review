@@ -188,11 +188,11 @@ public class Conference {
 	 * @throws ModelException 
 	 */
 	private void allocateArticle(Article article, int numReviewers) throws ModelException {
-		for (int i = 0; i < numReviewers; i++) {
+		//for (int i = 0; i < numReviewers; i++) {
 			List<Researcher> selectedReviewers = selectReviewers(article,
 					numReviewers);
 			addScoresToArticle(article, selectedReviewers);
-		}
+		//}
 	}
 
 	/**
@@ -240,8 +240,8 @@ public class Conference {
 				ableReviewers.add(reviewer);
 		}
 		if(ableReviewers.size() < numReviewers)
-			throw new ModelException("Não há revisores o suficiente para realizar "
-					+ "a alocação de artigos corretamente.");
+			throw new ModelException("Nï¿½o hï¿½ revisores o suficiente para realizar "
+					+ "a alocaï¿½ï¿½o de artigos corretamente.");
 		Collections.sort(ableReviewers);
 		List<Researcher> selectedReviewers = ableReviewers.subList(
 				LIST_FIRST_INDEX, numReviewers);
