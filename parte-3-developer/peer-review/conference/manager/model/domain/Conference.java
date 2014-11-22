@@ -232,7 +232,7 @@ public class Conference {
 	private List<Researcher> selectReviewers(Article article, int numReviewers) {
 		List<Researcher> ableReviewers = new ArrayList<Researcher>();
 		for (Researcher reviewer : reviewers) {
-			if (reviewer.isAbleToReview(article, this))
+			if (reviewer.isAbleToReview(article))
 				ableReviewers.add(reviewer);
 		}
 		Collections.sort(ableReviewers);

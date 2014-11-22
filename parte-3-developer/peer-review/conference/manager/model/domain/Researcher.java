@@ -1,7 +1,6 @@
 package conference.manager.model.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Researcher implements Comparable<Researcher> {
@@ -61,8 +60,8 @@ public class Researcher implements Comparable<Researcher> {
 	 * @param conference
 	 * 			the conference in which the article is going to be reviewed
 	 */
-	public boolean isAbleToReview(Article article, Conference conference) {
-		if(!(hasPaperToReviewInConference(conference)) &&
+	public boolean isAbleToReview(Article article) {
+		if(!(reviewsArticle(article)) &&
 				!(hasSameAffiliation(article)) &&
 				hasInterestIn(article.getResearchTopic()))
 			return true;
@@ -109,16 +108,12 @@ public class Researcher implements Comparable<Researcher> {
 	 * @param conference
 	 * 			the conference which is going to be evaluated upon
 	 */
-	public boolean hasPaperToReviewInConference(Conference conference) { //TODO
-		List<Article> articles;
+	public boolean reviewsArticle(Article article) {
 		List<Researcher> reviewers;
-		articles = conference.getArticles();
-		for(Article article : articles){
-			reviewers = article.getReviewers();
-			for(Researcher reviewer : reviewers){
-				if(reviewer.equals(this))
-					return true;
-			}
+		reviewers = article.getReviewers();
+		for(Researcher reviewer : reviewers){
+			if(reviewer.equals(this))
+				return true;
 		}
 		return false;
 	}
