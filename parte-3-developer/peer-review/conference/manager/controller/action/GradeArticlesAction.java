@@ -3,6 +3,7 @@ package conference.manager.controller.action;
 import conference.manager.model.ModelException;
 import conference.manager.model.domain.Researcher;
 import conference.manager.model.domain.Article;
+import conference.manager.model.domain.Score;
 import conference.manager.model.database.ModelDatabase;
 
 import java.util.List;
@@ -30,14 +31,14 @@ public class GradeArticlesAction extends ControllerAction {
 	}
 	
 	/**
-	 * Retrieves all the reviewers from the article.
+	 * Retrieves all the scores from the article.
 	 * 
 	 * @return
-	 * 		a list of reviewers from the article
+	 * 		a list of scores from the article
 	 * 
 	 */
-	public List<Researcher> getReviewers(Article article) {
-		return article.getReviewers();
+	public List<Score> getScores(Article article) {
+		return article.getScores();
 	}
 
 	/**

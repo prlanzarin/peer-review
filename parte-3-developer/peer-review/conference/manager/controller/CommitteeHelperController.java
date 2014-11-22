@@ -13,6 +13,7 @@ import conference.manager.model.database.ModelDatabase;
 import conference.manager.model.domain.Article;
 import conference.manager.model.domain.Conference;
 import conference.manager.model.domain.Researcher;
+import conference.manager.model.domain.Score;
 import conference.manager.view.CommitteeHelperView;
 import conference.manager.view.command.ArticlesSelectionCommand;
 
@@ -50,12 +51,12 @@ public class CommitteeHelperController {
 		GradeArticlesAction action = new GradeArticlesAction(database);
 		List<Article> articles = action.getArticles();
 		Article selectedArticle = view.requestArticle(articles);
-		List<Researcher> reviewers = action.getReviewers(selectedArticle);
-		if(reviewers.isEmpty())
-			throw new ModelException("N„o h· revisores para realizar a atribuiÁ„o de notas.");
-		Researcher selectedReviewer = view.requestReviewer(reviewers);
+		List<Score> scores = action.getScores(selectedArticle);
+		if(scores.isEmpty())
+			throw new ModelException("N√£o h√° revisores para realizar a atribui√ß√£o de notas.");
+		Score selectedScore = view.requestReviewer(scores);
 		int score = view.requestScore();
-		action.setReviewerGrade(selectedReviewer, score, selectedArticle);
+		action.setReviewerGrade(selectedScore.getReviewer(), score, selectedArticle);
 	}
 
 	public CommitteeHelperController(ModelDatabase database,

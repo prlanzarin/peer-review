@@ -63,6 +63,10 @@ public class Article {
 	public String getResearchTopic() {
 		return researchTopic;
 	}
+	
+	public List<Score> getScores(){
+		return scores;
+	}
 
 	/**
 	 * Returns the article's list of reviewers

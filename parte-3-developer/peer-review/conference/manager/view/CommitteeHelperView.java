@@ -2,7 +2,6 @@ package conference.manager.view;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,7 +14,8 @@ import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 import conference.manager.model.domain.Conference;
 import conference.manager.model.domain.Article;
-import conference.manager.model.domain.Researcher;
+import conference.manager.model.domain.Score;
+import conference.manager.model.domain.Score;
 import conference.manager.view.command.AllocationCommand;
 import conference.manager.view.command.ArticlesSelectionCommand;
 import conference.manager.view.command.Command;
@@ -139,34 +139,36 @@ public class CommitteeHelperView {
 	public String showArticles(List<Article> articles) {
 		int i = 0;
 		StringBuffer container = new StringBuffer();
-		container.append("Opção\tArtigo\tAutor\n");
+		container.append("Opção\tAutor\t\tAvaliado\tTítulo\n");
 		for (Article article : articles) {
-			container.append(i + "\t" + article.getTitle() + "\t"
-					+ article.getAuthor().getName() + "\n");
+			container.append(i + "\t" + article.getAuthor().getName() + "\t\t"
+					+ (article.isScored() ? "Sim" : "Não") + "\t\t"
+					+ article.getTitle() + "\n");
 			i++;
 		}
 		return container.toString();
 	}
 
-	public String showReviewers(List<Researcher> reviewers) {
+	public String showScores(List<Score> scores) {
 		int i = 0;
 		StringBuffer container = new StringBuffer();
-		container.append("Opção\tRevisor\n");
-		for (Researcher reviewer : reviewers) {
-			container.append(i + "\t" + reviewer.getName() + "\n");
+		container.append("Opção\tRevisor\t\tNota\n");
+		for (Score score : scores) {
+			container.append(i + "\t" + score.getReviewer().getName() + "\t\t"
+					+ (score.isAllocated() ? score.getScore() : "-") + "\n");
 			i++;
 		}
 		return container.toString();
 	}
 
-	public Researcher requestReviewer(List<Researcher> reviewers) {
+	public Score requestReviewer(List<Score> scores) {
 		StringBuffer container = new StringBuffer();
 		container.append("Escolha o revisor:\n");
-		container.append(showReviewers(reviewers));
+		container.append(showScores(scores));
 		System.out.println(container);
 		int selectedReviewer = readInteger("Informe o número do revisor", 0,
-				reviewers.size() - 1);
-		return reviewers.get(selectedReviewer);
+				scores.size() - 1);
+		return scores.get(selectedReviewer);
 	}
 
 	public Integer readInteger(String field, int min, int max) {
