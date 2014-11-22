@@ -1,5 +1,6 @@
 package conference.manager.model.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Researcher implements Comparable<Researcher> {
 		this.name = name;
 		this.university = university;
 		this.researchTopics = researchTopics;
+		this.allocatedArticles = new ArrayList<Article>();
 	}	
 	
 	/**

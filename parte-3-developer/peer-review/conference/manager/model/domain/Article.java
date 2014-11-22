@@ -120,6 +120,7 @@ public class Article {
 	 */
 	public void addScore(Score score) {
 		scores.add(score);
+		addReviewer(score.getReviewer());
 	}
 
 	/**

@@ -31,6 +31,18 @@ public class Score {
 		this.allocated = false;
 		this.score = 0;
 	}
+	
+	/**
+	 * 
+	 * @param reviewer
+	 * @param article
+	 * @param score
+	 */
+	public Score(Researcher reviewer, Article article, int score) throws ModelException{
+		setScore(score);
+		this.reviewer = reviewer;
+		this.article = article;
+	}
 
 	/**
 	 * Returns the article which this score refers to.
@@ -70,7 +82,7 @@ public class Score {
 	 */
 	public void setScore(int score) throws ModelException {
 		if(score < -3 || score > 3)
-			throw new ModelException("Invalid Arguments");
+			throw new ModelException("Parâmetros inválidos");
 		this.score = score;
 		this.allocated = true;
 	}

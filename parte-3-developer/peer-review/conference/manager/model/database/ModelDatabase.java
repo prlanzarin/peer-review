@@ -114,59 +114,21 @@ public class ModelDatabase {
 
 	private void initScores(){
 		try{
-		Score score1 = new Score(researchers.get(7), articles.get(0));
-		score1.setScore(2);
-		Score score2 = new Score(researchers.get(9), articles.get(0));
-		score1.getArticle().addScore(score1);
-		score1.getArticle().addReviewer(score1.getReviewer());
-		score2.getArticle().addScore(score2);
-		score2.getArticle().addReviewer(score2.getReviewer());
-		
-		Score score3 = new Score(researchers.get(6), articles.get(1));
-		score3.setScore(2);
-		Score score4 = new Score(researchers.get(1), articles.get(1));
-		score4.setScore(3);
-		score3.getArticle().addScore(score3);
-		score3.getArticle().addReviewer(score3.getReviewer());
-		score4.getArticle().addScore(score4);
-		score4.getArticle().addReviewer(score4.getReviewer());
-		
-		Score score5 = new Score(researchers.get(3), articles.get(2));
-		score5.setScore(-1);
-		Score score6 = new Score(researchers.get(5), articles.get(2));
-		score6.setScore(1);
-		score5.getArticle().addScore(score5);
-		score5.getArticle().addReviewer(score5.getReviewer());
-		score6.getArticle().addScore(score6);
-		score6.getArticle().addReviewer(score6.getReviewer());
-		
-		Score score7 = new Score(researchers.get(0), articles.get(3));
-		score7.setScore(1);
-		Score score8 = new Score(researchers.get(2), articles.get(3));
-		score8.setScore(0);
-		score7.getArticle().addScore(score7);
-		score7.getArticle().addReviewer(score7.getReviewer());
-		score8.getArticle().addScore(score8);
-		score8.getArticle().addReviewer(score8.getReviewer());
-		
-		Score score9 = new Score(researchers.get(3), articles.get(4));
-		score9.setScore(-3);
-		Score score10 = new Score(researchers.get(4), articles.get(4));
-		score10.setScore(-3);
-		score9.getArticle().addScore(score9);
-		score9.getArticle().addReviewer(score9.getReviewer());
-		score10.getArticle().addScore(score10);
-		score10.getArticle().addReviewer(score10.getReviewer());
-		
-		Score score11 = new Score(researchers.get(2), articles.get(4));
-		score11.setScore(-1);
-		Score score12 = new Score(researchers.get(5), articles.get(4));
-		score12.setScore(0);
-		score11.getArticle().addScore(score11);
-		score11.getArticle().addReviewer(score11.getReviewer());
-		score12.getArticle().addScore(score12);
-		score12.getArticle().addReviewer(score12.getReviewer());
-		
+			Conference conference1 = conferences.get(0);
+			conference1.addScoreToArticle(articles.get(0), researchers.get(7), 2);
+			conference1.addScoreToArticle(articles.get(0), researchers.get(9));
+			
+			Conference conference2 = conferences.get(1);
+			conference2.addScoreToArticle(articles.get(1), researchers.get(6), 2);
+			conference2.addScoreToArticle(articles.get(1), researchers.get(1), 3);
+			conference2.addScoreToArticle(articles.get(2), researchers.get(3), -1);
+			conference2.addScoreToArticle(articles.get(2), researchers.get(5), 1);
+			conference2.addScoreToArticle(articles.get(3), researchers.get(0), 1);
+			conference2.addScoreToArticle(articles.get(3), researchers.get(2), 0);
+			conference2.addScoreToArticle(articles.get(4), researchers.get(3), -3);
+			conference2.addScoreToArticle(articles.get(4), researchers.get(4), -3);
+			conference2.addScoreToArticle(articles.get(5), researchers.get(2), -1);
+			conference2.addScoreToArticle(articles.get(5), researchers.get(2), 0);
 		
 		} catch(ModelException e){
 			

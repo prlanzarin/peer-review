@@ -35,8 +35,8 @@ public class ConferenceTest {
 
 	@Test
 	public void getNameTest() {
-		assertEquals("ICSE", scoredConference.getName());
-		assertEquals("FSE", unscoredConference.getName());
+		assertEquals("ICSE", unscoredConference.getName());
+		assertEquals("FSE", scoredConference.getName());
 		assertEquals("SBES", unallocatedConference.getName());
 	}
 

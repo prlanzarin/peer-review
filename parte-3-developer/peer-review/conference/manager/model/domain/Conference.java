@@ -199,12 +199,25 @@ public class Conference {
 	 * @param reviewers
 	 *            The reviewer which will grade the article.
 	 */
-	private void addScoresToArticle(Article article, List<Researcher> reviewers) {
+	public void addScoresToArticle(Article article, List<Researcher> reviewers) {
 		for (Researcher reviewer : reviewers) {
-			Score newScore = new Score(reviewer, article);
-			addScore(newScore);
-			article.addScore(newScore);
+			addScoreToArticle(article, reviewer);
 		}
+	}
+
+	public void addScoreToArticle(Article article, Researcher reviewer) {
+		Score newScore = new Score(reviewer, article);
+		reviewer.addArticle(article);
+		addScore(newScore);
+		article.addScore(newScore);
+	}
+
+	public void addScoreToArticle(Article article, Researcher reviewer,
+			int score) throws ModelException {
+		Score newScore = new Score(reviewer, article, score);
+		reviewer.addArticle(article);
+		addScore(newScore);
+		article.addScore(newScore);
 	}
 
 	/**
@@ -234,7 +247,7 @@ public class Conference {
 	 * @return True if all the articles are graded, otherwise false.
 	 */
 	public boolean isScored() {
-		if(!isAllocated())
+		if (!isAllocated())
 			return false;
 		for (Article article : articles) {
 			if (!article.isScored())
