@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import conference.manager.model.ModelException;
 
 public class Conference {
@@ -24,6 +27,8 @@ public class Conference {
 
 	private List<Article> rejectedArticles;
 
+	private Log log;
+
 	public Conference(String name, List<Researcher> reviewers,
 			List<Article> articles) {
 		this.name = name;
@@ -33,6 +38,7 @@ public class Conference {
 		this.scores = new ArrayList<Score>();
 		this.acceptedArticles = null;
 		this.rejectedArticles = null;
+		this.log = LogFactory.getLog(getClass());
 	}
 
 	/**
@@ -169,13 +175,16 @@ public class Conference {
 	 * 
 	 * @param numReviewers
 	 *            the number of reviewers for each paper.
-	 * @throws ModelException 
+	 * @throws ModelException
 	 */
 	public void allocate(int numReviewers) throws ModelException {
+		
+		log.info("Início da alocação.");
 		for (Article article : articles) {
 			allocateArticle(article, numReviewers);
 		}
 		setAllocatedArticles(true);
+		log.info("Fim da alocação.");
 	}
 
 	/**
@@ -185,14 +194,14 @@ public class Conference {
 	 *            the article to be allocated.
 	 * @param numReviewers
 	 *            the number of reviewers to be allocated to the article.
-	 * @throws ModelException 
+	 * @throws ModelException
 	 */
-	private void allocateArticle(Article article, int numReviewers) throws ModelException {
-		//for (int i = 0; i < numReviewers; i++) {
-			List<Researcher> selectedReviewers = selectReviewers(article,
-					numReviewers);
-			addScoresToArticle(article, selectedReviewers);
-		//}
+	private void allocateArticle(Article article, int numReviewers)
+			throws ModelException {
+		List<Researcher> selectedReviewers = selectReviewers(article,
+				numReviewers);
+		addScoresToArticle(article, selectedReviewers);
+		
 	}
 
 	/**
@@ -206,6 +215,7 @@ public class Conference {
 	public void addScoresToArticle(Article article, List<Researcher> reviewers) {
 		for (Researcher reviewer : reviewers) {
 			addScoreToArticle(article, reviewer);
+			log.info("Artigo id " + article.getId() + " alocado ao revisor " + reviewer.getId() + ".");
 		}
 	}
 
@@ -233,15 +243,17 @@ public class Conference {
 	 *            The number of reviewers to be allocated to the article.
 	 * @return The list of reviewers that are able to review the article.
 	 */
-	private List<Researcher> selectReviewers(Article article, int numReviewers) throws ModelException{
+	private List<Researcher> selectReviewers(Article article, int numReviewers)
+			throws ModelException {
 		List<Researcher> ableReviewers = new ArrayList<Researcher>();
 		for (Researcher reviewer : reviewers) {
 			if (reviewer.isAbleToReview(article))
 				ableReviewers.add(reviewer);
 		}
-		if(ableReviewers.size() < numReviewers)
-			throw new ModelException("N�o h� revisores o suficiente para realizar "
-					+ "a aloca��o de artigos corretamente.");
+		if (ableReviewers.size() < numReviewers)
+			throw new ModelException(
+					"N�o h� revisores o suficiente para realizar "
+							+ "a aloca��o de artigos corretamente.");
 		Collections.sort(ableReviewers);
 		List<Researcher> selectedReviewers = ableReviewers.subList(
 				LIST_FIRST_INDEX, numReviewers);

@@ -21,7 +21,11 @@ public class Researcher implements Comparable<Researcher> {
 		this.university = university;
 		this.researchTopics = researchTopics;
 		this.allocatedArticles = new ArrayList<Article>();
-	}	
+	}
+	
+	int getId(){
+		return id;
+	}
 	
 	/**
 	 * Returns the researcher's name
