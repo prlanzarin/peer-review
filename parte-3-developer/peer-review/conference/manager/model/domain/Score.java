@@ -82,7 +82,7 @@ public class Score {
 	 */
 	public void setScore(int score) throws ModelException {
 		if(score < -3 || score > 3)
-			throw new ModelException("Parâmetros inválidos");
+			throw new ModelException("Parâmetros inválidos.");
 		this.score = score;
 		this.allocated = true;
 	}

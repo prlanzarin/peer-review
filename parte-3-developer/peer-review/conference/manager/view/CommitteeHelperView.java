@@ -26,7 +26,7 @@ public class CommitteeHelperView {
 
 	private static final int MAX_REVIEWERS = 5;
 
-	private static final int MIN_REVIEWERS = 0;
+	private static final int MIN_REVIEWERS = 2;
 
 	private static final int MIN_GRADE = -3;
 
@@ -88,8 +88,7 @@ public class CommitteeHelperView {
 				try {
 					command.execute();
 				} catch (ModelException e) {
-					System.out.println(e.toString());
-					log.warn(e);
+					log.warn(e.getMessage());
 				} catch (Exception e) {
 					handleUnexceptedError(e);
 				}

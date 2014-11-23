@@ -77,7 +77,8 @@ public class Conference {
 	 */
 	public List<Article> getAcceptedArticles() throws ModelException {
 		if (acceptedArticles == null) {
-			throw new ModelException("The articles were not selected yet");
+			throw new ModelException(
+					"Os artigos dessa conferência ainda não foram selecionados.");
 		}
 		return acceptedArticles;
 	}
@@ -91,7 +92,7 @@ public class Conference {
 	 */
 	public List<Article> getRejectedArticles() throws ModelException {
 		if (rejectedArticles == null) {
-			throw new ModelException("The articles were not selected yet");
+			throw new ModelException("Os artigos dessa conferência ainda não foram selecionados.");
 		}
 		return rejectedArticles;
 	}
@@ -106,7 +107,7 @@ public class Conference {
 	public void selectArticles() throws ModelException {
 		if (!isScored())
 			throw new ModelException(
-					"There are articles not graded in this conference");
+					"Há artigos não avaliados nessa conferência.");
 
 		this.acceptedArticles = new ArrayList<Article>();
 		this.rejectedArticles = new ArrayList<Article>();
@@ -178,7 +179,8 @@ public class Conference {
 	 * @throws ModelException
 	 */
 	public void allocate(int numReviewers) throws ModelException {
-		
+		if(isAllocated())
+			throw new ModelException("A conferência já foi alocada.");
 		log.info("Início da alocação.");
 		for (Article article : articles) {
 			allocateArticle(article, numReviewers);
@@ -203,6 +205,16 @@ public class Conference {
 		addScoresToArticle(article, selectedReviewers);
 		
 	}
+	
+	private void revertAllocationChanges(){
+		for(Score score : scores){
+			Article article = score.getArticle();
+			Researcher reviewer = score.getReviewer();
+			reviewer.removeArticle(article);
+			article.removeScore(score);
+		}
+		scores.clear();
+	}
 
 	/**
 	 * Add a score to the conference.
@@ -212,7 +224,7 @@ public class Conference {
 	 * @param reviewers
 	 *            The reviewer which will grade the article.
 	 */
-	public void addScoresToArticle(Article article, List<Researcher> reviewers) {
+	private void addScoresToArticle(Article article, List<Researcher> reviewers) {
 		for (Researcher reviewer : reviewers) {
 			addScoreToArticle(article, reviewer);
 			log.info("Artigo id " + article.getId() + " alocado ao revisor " + reviewer.getId() + ".");
@@ -250,10 +262,13 @@ public class Conference {
 			if (reviewer.isAbleToReview(article))
 				ableReviewers.add(reviewer);
 		}
-		if (ableReviewers.size() < numReviewers)
+		if (ableReviewers.size() < numReviewers){
+			revertAllocationChanges();
+			log.info("Alocação abortada.");
 			throw new ModelException(
-					"N�o h� revisores o suficiente para realizar "
-							+ "a aloca��o de artigos corretamente.");
+					"Não há revisores o suficiente para realizar "
+							+ "a alocação de artigos corretamente.");
+		}
 		Collections.sort(ableReviewers);
 		List<Researcher> selectedReviewers = ableReviewers.subList(
 				LIST_FIRST_INDEX, numReviewers);
