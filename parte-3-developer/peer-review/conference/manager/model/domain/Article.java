@@ -89,13 +89,13 @@ public class Article {
 	public String getResearchTopic() {
 		return researchTopic;
 	}
-
+	
 	/**
-	 * Returns the article's final score.
+	 * Calculates the average grade of the article
 	 * 
-	 * @return the article's final score.
+	 * @return the average grade of the article
 	 */
-	public double getFinalScore() {
+	public double getFinalScore(){
 		double finalScore = 0;
 		for (Score score : scores) {
 			finalScore += score.getScore();
@@ -104,11 +104,12 @@ public class Article {
 	}
 
 	/**
-	 * Returns the scores given by the reviewers.
+	 * Returns the list of scores associated to the article
 	 * 
-	 * @return the scores given by the reviewers.
+	 * @return
+	 * 			list of scores associtated to the article
 	 */
-	public List<Score> getScores() {
+	public List<Score> getScores(){
 		return scores;
 	}
 
@@ -211,7 +212,7 @@ public class Article {
 	 * 
 	 * @return true if the scores have been allocated, false otherwise
 	 */
-	public boolean isScored() { // TODO FIX
+	public boolean isScored() {
 		if (!(this.isAllocated()))
 			return false;
 		for (Score score : scores) {
