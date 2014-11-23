@@ -28,6 +28,8 @@ public class CommitteeHelperController {
 	public void onAllocationButtonClicked() throws ModelException {
 		AllocationAction action = new AllocationAction(database);
 		List<Conference> conferences = action.getUnallocatedConferences();
+		if(conferences.isEmpty())
+			throw new ModelException("Não há conferências disponíveis para serem alocadas.");
 		Conference selectedConference = view.requestConference(conferences);
 		int numOfReviewers = view.requestNumberOfReviewers();
 		action.allocateArticles(selectedConference, numOfReviewers);
