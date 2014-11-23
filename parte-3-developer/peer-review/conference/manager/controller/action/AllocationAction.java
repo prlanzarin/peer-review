@@ -4,6 +4,7 @@ import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 import conference.manager.model.domain.Conference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllocationAction extends ControllerAction {
@@ -34,8 +35,14 @@ public class AllocationAction extends ControllerAction {
 	 * 		a list of conferences from the database
 	 * 
 	 */
-	public List<Conference> getConferences() {
-		return database.getAllConferences();
+	public List<Conference> getUnallocatedConferences() {
+		List<Conference> conferences = database.getAllConferences();
+		List<Conference> unallocatedConferences = new ArrayList<Conference>();
+		for(Conference conference : conferences){
+			if(!(conference.isAllocated()))
+				unallocatedConferences.add(conference);
+		}
+		return unallocatedConferences;
 	}
 
 }
