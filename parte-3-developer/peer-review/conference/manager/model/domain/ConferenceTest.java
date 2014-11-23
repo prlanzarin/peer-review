@@ -29,8 +29,9 @@ public class ConferenceTest {
 		unscoredConference = database.getAllConferences().get(2);
 		unallocatedConference = database.getAllConferences().get(0);
 		reviewers = database.getAllResearchers().subList(0, 7);
-		articles = database.getAllArticles().subList(1,6);
-		acceptedArticles = Arrays.asList(articles.get(0), articles.get(2), articles.get(1));
+		articles = database.getAllArticles().subList(1, 6);
+		acceptedArticles = Arrays.asList(articles.get(0), articles.get(2),
+				articles.get(1));
 		rejectedArticles = Arrays.asList(articles.get(3), articles.get(4));
 
 	}
@@ -85,7 +86,7 @@ public class ConferenceTest {
 	}
 
 	@Test
-	public void selectArticlesSuccessTest(){
+	public void selectArticlesSuccessTest() {
 		try {
 			scoredConference.selectArticles();
 		} catch (ModelException e) {
@@ -112,9 +113,23 @@ public class ConferenceTest {
 		assertFalse(unallocatedConference.isAllocated());
 	}
 
-	public void allocateSuccessTest(){
-		//try{
-			
-		
+	@Test
+	public void allocateSuccessTest() {
+		try {
+			unallocatedConference.allocate(2);
+		} catch (ModelException e) {
+			fail();
+		}
+
+	}
+
+	@Test(expected = ModelException.class)
+	public void allocateFail1Test() throws ModelException {
+		unallocatedConference.allocate(3);
+	}
+
+	@Test(expected = ModelException.class)
+	public void allocateFail2Test() throws ModelException {
+		unscoredConference.allocate(2);
 	}
 }
