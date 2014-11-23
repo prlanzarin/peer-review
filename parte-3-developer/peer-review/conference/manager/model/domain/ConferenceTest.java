@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
+
 import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 
@@ -24,20 +26,20 @@ public class ConferenceTest {
 	public void setUp() throws Exception {
 		ModelDatabase database = new ModelDatabase(true);
 		scoredConference = database.getAllConferences().get(1);
-		unscoredConference = database.getAllConferences().get(0);
-		unallocatedConference = database.getAllConferences().get(2);
+		unscoredConference = database.getAllConferences().get(2);
+		unallocatedConference = database.getAllConferences().get(0);
 		reviewers = database.getAllResearchers().subList(0, 7);
 		articles = database.getAllArticles().subList(1,6);
-		acceptedArticles = articles.subList(0, 3);
-		rejectedArticles = articles.subList(3, 5);
+		acceptedArticles = Arrays.asList(articles.get(0), articles.get(2), articles.get(1));
+		rejectedArticles = Arrays.asList(articles.get(3), articles.get(4));
 
 	}
 
 	@Test
 	public void getNameTest() {
-		assertEquals("ICSE", unscoredConference.getName());
+		assertEquals("SBES", unscoredConference.getName());
 		assertEquals("FSE", scoredConference.getName());
-		assertEquals("SBES", unallocatedConference.getName());
+		assertEquals("ICSE", unallocatedConference.getName());
 	}
 
 	@Test
@@ -110,4 +112,9 @@ public class ConferenceTest {
 		assertFalse(unallocatedConference.isAllocated());
 	}
 
+	public void allocateSuccessTest(){
+		//try{
+			
+		
+	}
 }
