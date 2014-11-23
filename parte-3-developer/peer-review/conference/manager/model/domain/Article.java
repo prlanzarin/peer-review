@@ -90,6 +90,11 @@ public class Article {
 		return researchTopic;
 	}
 	
+	/**
+	 * Calculates the average grade of the article
+	 * 
+	 * @return the average grade of the article
+	 */
 	public double getFinalScore(){
 		double finalScore = 0;
 		for(Score score : scores){
@@ -98,6 +103,12 @@ public class Article {
 		return finalScore / scores.size();
 	}
 	
+	/**
+	 * Returns the list of scores associated to the article
+	 * 
+	 * @return
+	 * 			list of scores associtated to the article
+	 */
 	public List<Score> getScores(){
 		return scores;
 	}
