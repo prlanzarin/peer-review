@@ -2,6 +2,7 @@ package conference.manager.model.domain;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -25,8 +26,12 @@ public class ArticleTest {
 		database = new ModelDatabase(true);
 		researchers = database.getAllResearchers();
 		articles = database.getAllArticles();
-		articleReviewers1 = researchers;
-		articleReviewers2 = researchers.subList(1, 6);
+		articleReviewers1 = new ArrayList<Researcher>();
+		articleReviewers2 = new ArrayList<Researcher>();
+		articleReviewers1.add(researchers.get(7));
+		articleReviewers1.add(researchers.get(9));
+		articleReviewers2.add(researchers.get(6));
+		articleReviewers2.add(researchers.get(1));
 		article1 = new Article(1, "Coupling and Cohesion ", researchers
 				.get(0), "Modularity");
 		score1 = new Score(researchers.get(7), article1);
@@ -67,8 +72,13 @@ public class ArticleTest {
 	}
 	
 	@Test
-	public void getScoreTest() {
+	public void getScoreTest() throws ModelException{
 		assertEquals(articles.get(0).getScore(researchers.get(7)), score1);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void getScoreNullTest() throws ModelException{
+		Score score = articles.get(0).getScore(null);
 	}
 	
 	@Test
@@ -83,13 +93,18 @@ public class ArticleTest {
 	}
 	
 	@Test(expected = ModelException.class)
-	public void setScoreFailTest1() throws ModelException {
+	public void setScoreFailAboveTest() throws ModelException {
 		article1.setScore(researchers.get(7), 4);
 	}
 	
 	@Test(expected = ModelException.class)
-	public void setScoreFailTest2() throws ModelException {
+	public void setScoreFailBelowTest() throws ModelException {
 		article1.setScore(researchers.get(7), -4);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void setScoreFailNullTest() throws ModelException {
+		article1.setScore(null, -3);
 	}
 	
 	@Test

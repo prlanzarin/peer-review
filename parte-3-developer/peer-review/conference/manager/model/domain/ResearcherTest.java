@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 
 public class ResearcherTest {
@@ -20,6 +21,7 @@ public class ResearcherTest {
 	List<Conference> conferences;
 	Score score1;
 	Article article1;
+	Article nArticle;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -27,6 +29,7 @@ public class ResearcherTest {
 		researchers = database.getAllResearchers();
 		articles = database.getAllArticles();
 		conferences = database.getAllConferences();
+		Article nArticle = new Article(1, "", null, "");
 	}
 	
 	@Test
@@ -57,27 +60,35 @@ public class ResearcherTest {
 	}
 	
 	@Test
-	public void hasSameAffiliationTrueTest() {
+	public void hasInterestInFalseEmptyStringTest() {
+		assertFalse(researchers.get(2).hasInterestIn(""));
+	}
+	
+	@Test
+	public void hasSameAffiliationTrueSameUniversityTest() {
 		assertTrue(researchers.get(2).hasSameAffiliation(articles.get(0)));
 		assertTrue(researchers.get(7).hasSameAffiliation(articles.get(1)));
 	}
 	
 	@Test
-	public void hasSameAffiliationTrueTest2() {
+	public void hasSameAffiliationTrueSameAuthorTest() {
 		assertTrue(researchers.get(0).hasSameAffiliation(articles.get(0)));
 		assertTrue(researchers.get(5).hasSameAffiliation(articles.get(1)));
 	}
 	
 	@Test
 	public void hasSameAffiliationFalseTest() {
-		Article nArticle = new Article(1, "", null, "");
 		assertFalse(researchers.get(3).hasSameAffiliation(articles.get(0)));
 		assertFalse(researchers.get(8).hasSameAffiliation(articles.get(1)));
+
+	}
+	
+	public void hasSameAffiliationNullArticleFalseTest() {
 		assertFalse(researchers.get(1).hasSameAffiliation(nArticle));
 	}
 	
 	@Test
-	public void reviewsArticleTrueTest() {
+	public void reviewsArticleTrueTest() throws ModelException {
 		assertTrue(researchers.get(6).
 				reviewsArticle(articles.get(1)));
 		assertTrue(researchers.get(5).
@@ -85,15 +96,21 @@ public class ResearcherTest {
 	}
 	
 	@Test
-	public void reviewsArticleFalseTest() {
+	public void reviewsArticleFalseTest() throws ModelException {
 		assertFalse(researchers.get(6).
 				reviewsArticle(articles.get(2)));
 		assertFalse(researchers.get(0).
 				reviewsArticle(articles.get(0)));
 	}
 	
+	@Test(expected = ModelException.class)
+	public void reviewsArticleNullTest() throws ModelException {
+		assertFalse(researchers.get(6).
+				reviewsArticle(null));
+	}
+	
 	@Test
-	public void isAbleToReviewTrueTest() {
+	public void isAbleToReviewTrueTest() throws ModelException {
 		assertTrue(researchers.get(1).
 				isAbleToReview(articles.get(0)));
 		assertTrue(researchers.get(5).
@@ -102,15 +119,15 @@ public class ResearcherTest {
 	}
 	
 	@Test
-	public void isAbleToReviewFalseTestAlreadyAllocated() {
+	public void isAbleToReviewFalseTestAlreadyAllocated() throws ModelException {
 		assertFalse(researchers.get(5).
-				isAbleToReview(articles.get(4))); //já avalia o artigo
+				isAbleToReview(articles.get(4)));
 		assertFalse(researchers.get(1).
-				isAbleToReview(articles.get(4))); // já avalia na conf.
+				isAbleToReview(articles.get(4)));
 	}
 
 	@Test
-	public void isAbleToReviewFalseTestDifferentInterest() {
+	public void isAbleToReviewFalseTestDifferentInterest() throws ModelException {
 		assertFalse(researchers.get(2).
 				isAbleToReview(articles.get(1)));
 		assertFalse(researchers.get(4).
@@ -118,10 +135,16 @@ public class ResearcherTest {
 	}
 	
 	@Test
-	public void isAbleToReviewFalseTestSameAffiliation() {
+	public void isAbleToReviewFalseTestSameAffiliation() throws ModelException {
 		assertFalse(researchers.get(0).
-				isAbleToReview(articles.get(0))); //mesmo autor
+				isAbleToReview(articles.get(0)));
 		assertFalse(researchers.get(2).
-				isAbleToReview(articles.get(0))); //mesma universidade
+				isAbleToReview(articles.get(0)));
+	}
+	
+	@Test(expected = ModelException.class)
+	public void isAbleToReviewFalseNullReferenceTest() throws ModelException {
+		assertFalse(researchers.get(0).
+				isAbleToReview(null));
 	}
 }

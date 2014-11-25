@@ -135,6 +135,8 @@ public class Article {
 	public void setScore(Researcher reviewer, int scoreValue)
 			throws ModelException {
 		Score score;
+		if(reviewer == null)
+				throw new ModelException("Referência nula de pesquisador");
 		score = getScore(reviewer);
 		score.setScore(scoreValue);
 	}
@@ -143,8 +145,11 @@ public class Article {
 	 * Returns this article's score
 	 * 
 	 * @return this article's score
+	 * @throws ModelException 
 	 */
-	public Score getScore(Researcher reviewer) {
+	public Score getScore(Researcher reviewer) throws ModelException {
+		if(reviewer == null)
+			throw new ModelException("Referência nula de pesquisador");
 		for (Score score : scores) {
 			if ((score.getReviewer()).equals(reviewer))
 				return score;

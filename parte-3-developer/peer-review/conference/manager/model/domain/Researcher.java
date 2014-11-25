@@ -3,6 +3,8 @@ package conference.manager.model.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import conference.manager.model.ModelException;
+
 public class Researcher implements Comparable<Researcher> {
 
 	private int id;
@@ -75,8 +77,9 @@ public class Researcher implements Comparable<Researcher> {
 	 * 
 	 * @param conference
 	 *            the conference in which the article is going to be reviewed
+	 * @throws ModelException 
 	 */
-	public boolean isAbleToReview(Article article) {
+	public boolean isAbleToReview(Article article) throws ModelException {
 		if (!(reviewsArticle(article)) && !(hasSameAffiliation(article))
 				&& hasInterestIn(article.getResearchTopic()))
 			return true;
@@ -90,7 +93,7 @@ public class Researcher implements Comparable<Researcher> {
 	 * @param article
 	 *            the article which is going to be evaluated upon
 	 */
-	public boolean hasSameAffiliation(Article article) {
+	protected boolean hasSameAffiliation(Article article) {
 		Researcher author = article.getAuthor();
 		if (author == null)
 			return false;
@@ -106,7 +109,7 @@ public class Researcher implements Comparable<Researcher> {
 	 * @param researchTopic
 	 *            article's research topic
 	 */
-	public boolean hasInterestIn(String researchTopic) {
+	protected boolean hasInterestIn(String researchTopic) {
 		for (String interest : researchTopics) {
 			if (interest.equals(researchTopic))
 				return true;
@@ -120,9 +123,12 @@ public class Researcher implements Comparable<Researcher> {
 	 * 
 	 * @param conference
 	 *            the conference which is going to be evaluated upon
+	 * @throws ModelException 
 	 */
-	public boolean reviewsArticle(Article article) {
+	protected boolean reviewsArticle(Article article) throws ModelException {
 		List<Researcher> reviewers;
+		if(article == null)
+			throw new ModelException("Referência nula ao artigo.");
 		reviewers = article.getReviewers();
 		for (Researcher reviewer : reviewers) {
 			if (reviewer.equals(this))
