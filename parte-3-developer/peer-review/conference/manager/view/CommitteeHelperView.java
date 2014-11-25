@@ -2,7 +2,6 @@ package conference.manager.view;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,21 +15,12 @@ import conference.manager.model.database.ModelDatabase;
 import conference.manager.model.domain.Conference;
 import conference.manager.model.domain.Article;
 import conference.manager.model.domain.Score;
-import conference.manager.model.domain.Score;
 import conference.manager.view.command.AllocationCommand;
 import conference.manager.view.command.ArticlesSelectionCommand;
 import conference.manager.view.command.Command;
 import conference.manager.view.command.GradeArticlesCommand;
 
 public class CommitteeHelperView {
-
-	private static final int MAX_REVIEWERS = 5;
-
-	private static final int MIN_REVIEWERS = 2;
-
-	private static final int MIN_GRADE = -3;
-
-	private static final int MAX_GRADE = 3;
 
 	public static final String ALLOCATE_CODE = "A";
 
@@ -58,8 +48,8 @@ public class CommitteeHelperView {
 	}
 
 	public int requestNumberOfReviewers() {
-		return readInteger("Informe o número de Revisores", MIN_REVIEWERS,
-				MAX_REVIEWERS);
+		return readInteger("Informe o número de Revisores", Conference.MIN_REVIEWERS,
+				Conference.MAX_REVIEWERS);
 	}
 
 	public Conference requestConference(List<Conference> conferences) {
@@ -73,8 +63,8 @@ public class CommitteeHelperView {
 	}
 
 	public int requestScore() {
-		return readInteger("Informe a nota (inteiro entre " + MIN_GRADE + " e "
-				+ MAX_GRADE + ")", MIN_GRADE, MAX_GRADE);
+		return readInteger("Informe a nota (inteiro entre " +  Score.MIN_GRADE + " e "
+				+ Score.MAX_GRADE + ")", Score.MIN_GRADE, Score.MAX_GRADE);
 	}
 
 	public void showUI() {

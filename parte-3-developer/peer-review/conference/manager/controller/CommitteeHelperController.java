@@ -12,10 +12,8 @@ import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 import conference.manager.model.domain.Article;
 import conference.manager.model.domain.Conference;
-import conference.manager.model.domain.Researcher;
 import conference.manager.model.domain.Score;
 import conference.manager.view.CommitteeHelperView;
-import conference.manager.view.command.ArticlesSelectionCommand;
 
 public class CommitteeHelperController {
 
@@ -23,13 +21,17 @@ public class CommitteeHelperController {
 
 	private CommitteeHelperView view;
 
-	private Log log;
+	public CommitteeHelperController(ModelDatabase database,
+			CommitteeHelperView view) {
+		this.database = database;
+		this.view = view;
+	}
 
 	public void onAllocationButtonClicked() throws ModelException {
 		AllocationAction action = new AllocationAction(database);
 		List<Conference> conferences = action.getUnallocatedConferences();
 		if(conferences.isEmpty())
-			throw new ModelException("Não há conferências disponíveis para serem alocadas.");
+			throw new ModelException("NÃ£o hÃ¡ conferÃªncias disponÃ­veis para serem alocadas.");
 		Conference selectedConference = view.requestConference(conferences);
 		int numOfReviewers = view.requestNumberOfReviewers();
 		action.allocateArticles(selectedConference, numOfReviewers);
@@ -60,13 +62,6 @@ public class CommitteeHelperController {
 		Score selectedScore = view.requestReviewer(scores);
 		int score = view.requestScore();
 		action.setReviewerGrade(selectedScore.getReviewer(), score, selectedArticle);
-	}
-
-	public CommitteeHelperController(ModelDatabase database,
-			CommitteeHelperView view) {
-		this.database = database;
-		this.view = view;
-		this.log = LogFactory.getLog(getClass());
 	}
 
 }

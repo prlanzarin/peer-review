@@ -8,8 +8,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
 import conference.manager.model.ModelException;
 import conference.manager.model.database.ModelDatabase;
 
@@ -115,21 +113,35 @@ public class ConferenceTest {
 
 	@Test
 	public void allocateSuccessTest() {
+		final int NUM_REVIEWERS = 2;
 		try {
-			unallocatedConference.allocate(2);
+			unallocatedConference.allocate(NUM_REVIEWERS);
 		} catch (ModelException e) {
 			fail();
 		}
-
+		for(Article article : unallocatedConference.getArticles()){
+			assertTrue(article.getScores().size() == NUM_REVIEWERS);
+			assertTrue(article.getReviewers().size() == NUM_REVIEWERS);
+		}
 	}
 
 	@Test(expected = ModelException.class)
-	public void allocateFail1Test() throws ModelException {
+	public void allocateTooFewReviewersFailTest() throws ModelException {
+		unallocatedConference.allocate(1);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void allocateTooManyReviewersFailTest() throws ModelException {
+		unallocatedConference.allocate(6);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void allocateMoreThanPossibleFailTest() throws ModelException {
 		unallocatedConference.allocate(3);
 	}
 
 	@Test(expected = ModelException.class)
-	public void allocateFail2Test() throws ModelException {
+	public void allocateAllocatedConferenceFailTest() throws ModelException {
 		unscoredConference.allocate(2);
 	}
 }

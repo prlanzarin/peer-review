@@ -8,7 +8,6 @@ import conference.manager.model.ModelException;
 import conference.manager.model.domain.Article;
 import conference.manager.model.domain.Conference;
 import conference.manager.model.domain.Researcher;
-import conference.manager.model.domain.Score;
 
 public class ModelDatabase {
 

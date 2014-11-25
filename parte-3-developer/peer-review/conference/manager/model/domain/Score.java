@@ -8,6 +8,10 @@ import conference.manager.model.ModelException;
  *
  */
 public class Score {
+	
+	public static final int MIN_GRADE = -3;
+	
+	public static final int MAX_GRADE = 3;
 
 	private Researcher reviewer;
 
@@ -81,10 +85,19 @@ public class Score {
 	 *            The score between -3 and 3 given by the reviewer.
 	 */
 	public void setScore(int score) throws ModelException {
-		if(score < -3 || score > 3)
+		if(!isScoreValid(score))
 			throw new ModelException("Parâmetros inválidos.");
 		this.score = score;
 		this.allocated = true;
+	}
+	
+	/**
+	 * Checks if the score is valid.
+	 * @param score the score to be tested.
+	 * @return True if the score is in range [MIN_SCORE, MAX_SCORE]
+	 */
+	private boolean isScoreValid(int score){
+		return score >= MIN_GRADE && score <= MAX_GRADE;
 	}
 
 	/**

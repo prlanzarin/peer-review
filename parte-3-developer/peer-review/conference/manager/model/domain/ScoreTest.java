@@ -24,8 +24,8 @@ public class ScoreTest {
 		database = new ModelDatabase(true);
 		researchers = database.getAllResearchers();
 		articles = database.getAllArticles();
-		score1 = new Score(researchers.get(7), articles.get(0));
-		score2 = new Score(researchers.get(9), articles.get(0));
+		score1 = new Score(researchers.get(7), articles.get(0), 2);
+		score2 = new Score(researchers.get(9), articles.get(0), -3);
 		score3 = new Score(researchers.get(6), articles.get(1));
 		score4 = new Score(researchers.get(0), articles.get(1));
 	}
@@ -57,35 +57,45 @@ public class ScoreTest {
 		assertEquals(researcher7, score3.getReviewer());
 		assertEquals(researcher1, score4.getReviewer());
 	}
+	
+	@Test
+	public void getScoreTest(){
+		assertEquals(2, score1.getScore());
+		assertEquals(-3, score2.getScore());
+	}
 
 	@Test
 	public void setScoreSuccessTest() {
 		try {
-			score1.setScore(2);
+			score3.setScore(2);
+			score4.setScore(0);
 		} catch (ModelException e) {
 			fail();
 		}
+		assertEquals(2, score3.getScore());
+		assertEquals(0, score4.getScore());
 	}
 
 	@Test(expected = ModelException.class)
-	public void setScoreFail1Test() throws ModelException {
+	public void setScoreTooBigScoreFailTest() throws ModelException {
 		score1.setScore(4);
 	}
 
 	@Test(expected = ModelException.class)
-	public void setScoreFail2Test() throws ModelException {
+	public void setScoreTooSmallScoreFail2Test() throws ModelException {
 		score1.setScore(-4);
 	}
 
 	@Test
 	public void isAllocatedTest() throws ModelException {
-		score1.setScore(0);
+		score3.setScore(0);
 		assertTrue(score1.isAllocated());
+		assertTrue(score3.isAllocated());
 	}
 
 	@Test
 	public void isNotAllocatedTest() {
-		assertFalse(score1.isAllocated());
+		assertFalse(score3.isAllocated());
 	}
 
 }

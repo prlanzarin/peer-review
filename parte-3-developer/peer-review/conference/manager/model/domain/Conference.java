@@ -13,6 +13,10 @@ public class Conference {
 
 	private static final int LIST_FIRST_INDEX = 0;
 
+	public static final int MIN_REVIEWERS = 2;
+
+	public static final int MAX_REVIEWERS = 5;
+
 	private String name;
 
 	private boolean allocatedArticles;
@@ -92,7 +96,8 @@ public class Conference {
 	 */
 	public List<Article> getRejectedArticles() throws ModelException {
 		if (rejectedArticles == null) {
-			throw new ModelException("Os artigos dessa conferência ainda não foram selecionados.");
+			throw new ModelException(
+					"Os artigos dessa conferência ainda não foram selecionados.");
 		}
 		return rejectedArticles;
 	}
@@ -120,6 +125,17 @@ public class Conference {
 		}
 		Collections.sort(acceptedArticles, new Article.ByDescendingGrade());
 		Collections.sort(rejectedArticles, new Article.ByAscendingGrade());
+	}
+
+	/**
+	 * Checks if the number of reviewers is valid.
+	 * 
+	 * @param numReviewers
+	 *            the number of reviewers to be tested.
+	 * @return true if numReviewers is in range [MIN_REVIEWERS, MAX_REVIEWERS]
+	 */
+	private boolean isNumReviewersValid(int numReviewers) {
+		return numReviewers >= MIN_REVIEWERS && numReviewers <= MAX_REVIEWERS;
 	}
 
 	/**
@@ -179,8 +195,11 @@ public class Conference {
 	 * @throws ModelException
 	 */
 	public void allocate(int numReviewers) throws ModelException {
-		if(isAllocated())
+		if (isAllocated())
 			throw new ModelException("A conferência já foi alocada.");
+		if (!isNumReviewersValid(numReviewers))
+			throw new ModelException("O número de revisores deve ser entre "
+					+ MIN_REVIEWERS + " e " + MAX_REVIEWERS + ".");
 		log.info("Início da alocação.");
 		for (Article article : articles) {
 			allocateArticle(article, numReviewers);
@@ -203,11 +222,11 @@ public class Conference {
 		List<Researcher> selectedReviewers = selectReviewers(article,
 				numReviewers);
 		addScoresToArticle(article, selectedReviewers);
-		
+
 	}
-	
-	private void revertAllocationChanges(){
-		for(Score score : scores){
+
+	private void revertAllocationChanges() {
+		for (Score score : scores) {
 			Article article = score.getArticle();
 			Researcher reviewer = score.getReviewer();
 			reviewer.removeArticle(article);
@@ -227,7 +246,8 @@ public class Conference {
 	private void addScoresToArticle(Article article, List<Researcher> reviewers) {
 		for (Researcher reviewer : reviewers) {
 			addScoreToArticle(article, reviewer);
-			log.info("Artigo id " + article.getId() + " alocado ao revisor " + reviewer.getId() + ".");
+			log.info("Artigo id " + article.getId() + " alocado ao revisor "
+					+ reviewer.getId() + ".");
 		}
 	}
 
@@ -262,7 +282,7 @@ public class Conference {
 			if (reviewer.isAbleToReview(article))
 				ableReviewers.add(reviewer);
 		}
-		if (ableReviewers.size() < numReviewers){
+		if (ableReviewers.size() < numReviewers) {
 			revertAllocationChanges();
 			log.info("Alocação abortada.");
 			throw new ModelException(
