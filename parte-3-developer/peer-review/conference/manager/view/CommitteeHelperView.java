@@ -22,34 +22,13 @@ import conference.manager.view.command.GradeArticlesCommand;
 
 public class CommitteeHelperView {
 
-	public static final String ALLOCATE_CODE = "A";
-
-	public static final String SELECT_CODE = "S";
-
-	public static final String GRADE_CODE = "G";
-
-	public static final String EXIT_CODE = "E";
-
-	private final Map<String, Command> commands;
-
-	private final BufferedReader reader;
-
-	private final Log log;
-
-	public CommitteeHelperView() {
-		reader = new BufferedReader(new InputStreamReader(System.in));
-		log = LogFactory.getLog(getClass());
-		CommitteeHelperController controller = new CommitteeHelperController(
-				new ModelDatabase(true), this);
-		commands = new TreeMap<String, Command>();
-		commands.put(ALLOCATE_CODE, new AllocationCommand(controller));
-		commands.put(SELECT_CODE, new ArticlesSelectionCommand(controller));
-		commands.put(GRADE_CODE, new GradeArticlesCommand(controller));
-	}
+	private final Log log = LogFactory.getLog(getClass());
+	
+	private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 	public int requestNumberOfReviewers() {
-		return readInteger("Informe o número de Revisores", Conference.MIN_REVIEWERS,
-				Conference.MAX_REVIEWERS);
+		return readInteger("Informe o número de Revisores",
+				Conference.MIN_REVIEWERS, Conference.MAX_REVIEWERS);
 	}
 
 	public Conference requestConference(List<Conference> conferences) {
@@ -63,46 +42,9 @@ public class CommitteeHelperView {
 	}
 
 	public int requestScore() {
-		return readInteger("Informe a nota (inteiro entre " +  Score.MIN_GRADE + " e "
-				+ Score.MAX_GRADE + ")", Score.MIN_GRADE, Score.MAX_GRADE);
-	}
-
-	public void showUI() {
-		String menu = getMenu();
-		String option;
-		do {
-			System.out.println(menu);
-			option = readString("Informe a opção escolhida").toUpperCase();
-			Command command = commands.get(option);
-			if (command != null) {
-				try {
-					command.execute();
-				} catch (ModelException e) {
-					log.warn(e.getMessage());
-				} catch (Exception e) {
-					handleUnexceptedError(e);
-				}
-			}
-
-		} while (!option.equals(EXIT_CODE));
-	}
-
-	public String getMenu() {
-		StringBuffer menu = new StringBuffer();
-		menu.append("\nPeer Review\n");
-		menu.append(getOptions());
-		return menu.toString();
-	}
-
-	public String getOptions() {
-		StringBuffer options = new StringBuffer();
-		options.append("Escolha uma opção:\n");
-		options.append(ALLOCATE_CODE
-				+ " - Alocar revisores para uma conferência.\n");
-		options.append(GRADE_CODE + " - Atribuir nota a um artigo.\n");
-		options.append(SELECT_CODE + " - Mostrar artigos aprovados.\n");
-		options.append(EXIT_CODE + " - Sair.\n");
-		return options.toString();
+		return readInteger("Informe a nota (inteiro entre " + Score.MIN_GRADE
+				+ " e " + Score.MAX_GRADE + ")", Score.MIN_GRADE,
+				Score.MAX_GRADE);
 	}
 
 	public Article requestArticle(List<Article> articles) {
@@ -211,19 +153,17 @@ public class CommitteeHelperView {
 		container.append(showArticleFinalGrades(articles));
 		System.out.println(container);
 	}
-	
-	public String showArticleFinalGrades(List<Article> articles){
+
+	public String showArticleFinalGrades(List<Article> articles) {
 		StringBuffer container = new StringBuffer();
 		container.append("Autor\t\tMédia Final\tTítulo\n");
-		for(Article article : articles){
+		for (Article article : articles) {
 			container.append(article.getAuthor().getName() + "\t\t"
-					+ article.getFinalScore() + "\t\t"
-					+ article.getTitle() + "\n");
+					+ article.getFinalScore() + "\t\t" + article.getTitle()
+					+ "\n");
 		}
 		return container.toString();
 	}
-	
-	//public 
 
 	public String readString(String field) {
 		String value = null;

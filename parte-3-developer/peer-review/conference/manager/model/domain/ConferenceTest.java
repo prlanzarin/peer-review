@@ -28,8 +28,7 @@ public class ConferenceTest {
 		unallocatedConference = database.getAllConferences().get(0);
 		reviewers = database.getAllResearchers().subList(0, 7);
 		articles = database.getAllArticles().subList(1, 6);
-		acceptedArticles = Arrays.asList(articles.get(0), articles.get(2),
-				articles.get(1));
+		acceptedArticles = Arrays.asList(articles.get(0), articles.get(2), articles.get(1));
 		rejectedArticles = Arrays.asList(articles.get(3), articles.get(4));
 
 	}
@@ -136,7 +135,7 @@ public class ConferenceTest {
 	}
 	
 	@Test(expected = ModelException.class)
-	public void allocateMoreThanPossibleFailTest() throws ModelException {
+	public void allocateImpossibleFailTest() throws ModelException {
 		unallocatedConference.allocate(3);
 	}
 

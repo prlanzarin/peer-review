@@ -2,7 +2,7 @@ package conference.manager;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import conference.manager.view.CommitteeHelperView;
+import conference.manager.view.CommitteeView;
 
 public class PeerReview {
 
@@ -11,7 +11,7 @@ public class PeerReview {
 	public static void main(String[] args) {
 		PropertyConfigurator.configure(PeerReview.class
 				.getResource(PROPERTIES_FILE_LOG4J));
-		CommitteeHelperView view = new CommitteeHelperView();
+		CommitteeView view = new CommitteeView();
 		view.showUI();
 	}
 

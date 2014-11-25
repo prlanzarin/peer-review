@@ -19,12 +19,11 @@ public class CommitteeHelperController {
 
 	private ModelDatabase database;
 
-	private CommitteeHelperView view;
+	private CommitteeHelperView helperView;
 
-	public CommitteeHelperController(ModelDatabase database,
-			CommitteeHelperView view) {
+	public CommitteeHelperController(ModelDatabase database) {
 		this.database = database;
-		this.view = view;
+		this.helperView = new CommitteeHelperView();
 	}
 
 	public void onAllocationButtonClicked() throws ModelException {
@@ -32,8 +31,8 @@ public class CommitteeHelperController {
 		List<Conference> conferences = action.getUnallocatedConferences();
 		if(conferences.isEmpty())
 			throw new ModelException("Não há conferências disponíveis para serem alocadas.");
-		Conference selectedConference = view.requestConference(conferences);
-		int numOfReviewers = view.requestNumberOfReviewers();
+		Conference selectedConference = helperView.requestConference(conferences);
+		int numOfReviewers = helperView.requestNumberOfReviewers();
 		action.allocateArticles(selectedConference, numOfReviewers);
 		
 	}
@@ -41,26 +40,26 @@ public class CommitteeHelperController {
 	public void onArticlesSelectionButtonClicked() throws ModelException {
 		ArticlesSelectionAction action = new ArticlesSelectionAction(database);
 		List<Conference> conferences = action.getConferences();
-		Conference selectedConference = view.requestConference(conferences);
+		Conference selectedConference = helperView.requestConference(conferences);
 		action.selectArticles(selectedConference);
 		List<Article> acceptedArticles = action
 				.getAcceptedArticles(selectedConference);
 		List<Article> rejectedArticles = action
 				.getRejectedArticles(selectedConference);
-		view.showAcceptedArticles(acceptedArticles);
-		view.showRejectedArticles(rejectedArticles);
+		helperView.showAcceptedArticles(acceptedArticles);
+		helperView.showRejectedArticles(rejectedArticles);
 
 	}
 
 	public void onGradeArticlesButtonClicked() throws ModelException {
 		GradeArticlesAction action = new GradeArticlesAction(database);
 		List<Article> articles = action.getArticles();
-		Article selectedArticle = view.requestArticle(articles);
+		Article selectedArticle = helperView.requestArticle(articles);
 		List<Score> scores = action.getScores(selectedArticle);
 		if(scores.isEmpty())
 			throw new ModelException("Não há revisores alocados para esse artigo.");
-		Score selectedScore = view.requestReviewer(scores);
-		int score = view.requestScore();
+		Score selectedScore = helperView.requestReviewer(scores);
+		int score = helperView.requestScore();
 		action.setReviewerGrade(selectedScore.getReviewer(), score, selectedArticle);
 	}
 
