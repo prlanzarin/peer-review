@@ -40,7 +40,7 @@ public class ResearcherTest {
 	}
 	
 	@Test
-	public void getNamet() {
+	public void getNameTest() {
 		assertEquals(researchers.get(1).getName(), "Ana");
 		assertEquals(researchers.get(2).getName(), "Manoel");
 		assertEquals(researchers.get(3).getName(), "Joana");

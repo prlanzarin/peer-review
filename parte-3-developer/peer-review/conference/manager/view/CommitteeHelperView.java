@@ -3,22 +3,13 @@ package conference.manager.view;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import conference.manager.controller.CommitteeHelperController;
-import conference.manager.model.ModelException;
-import conference.manager.model.database.ModelDatabase;
 import conference.manager.model.domain.Conference;
 import conference.manager.model.domain.Article;
 import conference.manager.model.domain.Score;
-import conference.manager.view.command.AllocationCommand;
-import conference.manager.view.command.ArticlesSelectionCommand;
-import conference.manager.view.command.Command;
-import conference.manager.view.command.GradeArticlesCommand;
 
 public class CommitteeHelperView {
 

@@ -2,9 +2,6 @@ package conference.manager.controller;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import conference.manager.controller.action.AllocationAction;
 import conference.manager.controller.action.ArticlesSelectionAction;
 import conference.manager.controller.action.GradeArticlesAction;

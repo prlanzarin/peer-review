@@ -78,7 +78,7 @@ public class ArticleTest {
 	
 	@Test(expected = ModelException.class)
 	public void getScoreNullTest() throws ModelException{
-		Score score = articles.get(0).getScore(null);
+		articles.get(0).getScore(null);
 	}
 	
 	@Test
