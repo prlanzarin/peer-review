@@ -26,6 +26,11 @@ public class Researcher implements Comparable<Researcher> {
 		this.allocatedArticles = new ArrayList<Article>();
 	}
 
+	/**
+	 * Returns the researcher's ID
+	 * 
+	 * @return the researcher's ID
+	 */
 	int getId() {
 		return id;
 	}
@@ -33,7 +38,7 @@ public class Researcher implements Comparable<Researcher> {
 	/**
 	 * Returns the researcher's name
 	 * 
-	 * @return the researcher's names
+	 * @return the researcher's name
 	 */
 	public String getName() {
 		return name;

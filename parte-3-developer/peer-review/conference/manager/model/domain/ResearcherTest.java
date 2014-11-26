@@ -29,7 +29,21 @@ public class ResearcherTest {
 		researchers = database.getAllResearchers();
 		articles = database.getAllArticles();
 		conferences = database.getAllConferences();
-		Article nArticle = new Article(1, "", null, "");
+		nArticle = new Article(1, "", null, "");
+	}
+	
+	@Test
+	public void getResearcherIdTest() {
+		assertEquals(researchers.get(0).getId(), 1);
+		assertEquals(researchers.get(1).getId(), 2);
+		assertEquals(researchers.get(2).getId(), 3);
+	}
+	
+	@Test
+	public void getNamet() {
+		assertEquals(researchers.get(1).getName(), "Ana");
+		assertEquals(researchers.get(2).getName(), "Manoel");
+		assertEquals(researchers.get(3).getName(), "Joana");
 	}
 	
 	@Test
@@ -83,7 +97,7 @@ public class ResearcherTest {
 
 	}
 	
-	public void hasSameAffiliationNullArticleFalseTest() {
+	public void hasSameAffiliationNullArticleTest() {
 		assertFalse(researchers.get(1).hasSameAffiliation(nArticle));
 	}
 	

@@ -8,3 +8,4 @@ parte-3-developer/peer-review/commons-logging-1.0.4.jar
 parte-3-developer/peer-review/log4j-1.2.15.jar
 parte-2-designer/diagramas/peer-review.asta.lock
 parte-3-developer/peer-review/.classpath
+*.classpath
